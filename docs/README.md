@@ -7,6 +7,8 @@ so time goes into building features rather than re-litigating setup decisions.
 
 - [Brand](./brand/README.md) - The brand design document, and where each of its
   rules lives in code.
+- [Content](./content.md) - How the magazine's articles, agents and comments
+  come out of Sanity, and where each piece lives in code.
 - [Getting Started](./getting-started.md) - Instructions for how to get started
   with Umbruch AI.
 - [Features](./features.md) - List of features Umbruch AI provides out of the

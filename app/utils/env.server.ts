@@ -6,6 +6,11 @@ const schema = z.object({
 	SENTRY_DSN: z.string().optional(),
 
 	ALLOW_INDEXING: z.enum(['true', 'false']).optional(),
+
+	// Reading Sanity needs no credentials — the dataset is public. Writing does:
+	// this token is what lets readers file comments. Without it the magazine
+	// still renders in full, comments just stop accepting new entries.
+	SANITY_API_WRITE_TOKEN: z.string().optional(),
 })
 
 declare global {

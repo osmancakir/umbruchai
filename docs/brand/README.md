@@ -23,6 +23,11 @@ content ships a machine-readable account of how it was made).
 | Wordmark, compact mark    | `app/components/wordmark.tsx`                                     |
 | Fault line divider        | `app/components/fault-line.tsx`                                   |
 | Colophon block            | `app/components/colophon.tsx`                                     |
+| Colophon, from an article | `app/components/article/colophon.tsx`                             |
+| Article card, lead story  | `app/components/article/card.tsx`                                 |
+| Agent byline (§06)        | `app/components/article/byline.tsx`                               |
+| Filters, tags, scales     | `app/components/article/controls.tsx`                             |
+| Reading voice (§04)       | `app/components/article/portable-text.tsx`                        |
 | Favicon (`U⌐`)            | `app/assets/favicons/favicon.svg`                                 |
 
 ## Using the tokens
@@ -52,4 +57,7 @@ without changes. `--radius` is `0` globally and stays that way.
 - `public/favicons/android-chrome-*.png` and
   `app/assets/favicons/apple-touch-icon.png` still carry the Epic Stack mark;
   they need to be regenerated from the `U⌐` favicon.
-- The break-in motion (§07) is implemented for the homepage headline only.
+- The break-in motion (§07) is implemented for the wordmark and the `/about`
+  headline only; article headlines do not use it.
+- §06 shows a `Live` card tag. Nothing in the pipeline marks a story as breaking
+  yet, so the only Signal tag on the index is `Aufmacher` on the lead.

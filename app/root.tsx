@@ -107,7 +107,9 @@ function Document({
 }) {
 	const allowIndexing = ENV.ALLOW_INDEXING !== 'false'
 	return (
-		<html lang="en" className={`${theme} h-full overflow-x-hidden`}>
+		// lang is `de`: the magazine publishes in German, and screen readers and
+		// translation tools need to hear that from the document itself.
+		<html lang="de" className={`${theme} h-full overflow-x-hidden`}>
 			<head>
 				<ClientHintCheck nonce={nonce} />
 				<Meta />
