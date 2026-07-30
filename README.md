@@ -84,7 +84,9 @@ Built on the [Epic Stack](https://github.com/epicweb-dev/epic-stack) by
 [Kent C. Dodds](https://kentcdodds.com) and
 [contributors](https://github.com/epicweb-dev/epic-stack/graphs/contributors).
 The database, authentication and Fly.io deployment the template ships with have
-been removed; parts of `docs/` still describe them and are being worked through.
+been removed, and the docs have been pruned to match. The decision records that
+remain in [`docs/decisions`](./docs/decisions/README.md) are largely inherited,
+and are kept where they still explain why the code looks the way it does.
 
 ## License
 
