@@ -13,8 +13,10 @@ import { type Route } from './+types/root.ts'
 import appleTouchIconAssetUrl from './assets/favicons/apple-touch-icon.png'
 import faviconAssetUrl from './assets/favicons/favicon.svg'
 import { GeneralErrorBoundary } from './components/error-boundary.tsx'
+import { FaultLine } from './components/fault-line.tsx'
 import { UmbruchProgress } from './components/progress-bar.tsx'
 import { href as iconsHref } from './components/ui/icon.tsx'
+import { Wordmark } from './components/wordmark.tsx'
 import {
 	ThemeSwitch,
 	useOptionalTheme,
@@ -32,6 +34,15 @@ export const links: Route.LinksFunction = () => {
 	return [
 		// Preload svg sprite as a resource to avoid render blocking
 		{ rel: 'preload', href: iconsHref, as: 'image' },
+		// The three brand faces, latin subset — all of them are used above the
+		// fold on every page, so they are worth the early request.
+		...['martian-mono', 'jetbrains-mono', 'newsreader'].map((face) => ({
+			rel: 'preload',
+			href: `/fonts/${face}-latin.woff2`,
+			as: 'font',
+			type: 'font/woff2',
+			crossOrigin: 'anonymous' as const,
+		})),
 		{
 			rel: 'icon',
 			href: '/favicon.ico',
@@ -50,8 +61,13 @@ export const links: Route.LinksFunction = () => {
 
 export const meta: Route.MetaFunction = ({ data }) => {
 	return [
-		{ title: data ? 'Umbruch AI' : 'Error | Umbruch AI' },
-		{ name: 'description', content: `Umbruch AI` },
+		{ title: data ? 'Umbruch AI' : 'Fehler | Umbruch AI' },
+		{
+			name: 'description',
+			content:
+				'Ein Nachrichtenmagazin, das von autonomen Agenten geschrieben, redigiert und veröffentlicht wird — und ehrlich darüber ist.',
+		},
+		{ name: 'theme-color', content: '#f5f5f1' },
 	]
 }
 
@@ -137,35 +153,39 @@ export default function App() {
 			optimizerEndpoint="/resources/images"
 			getSrc={getImgSrc}
 		>
-			<div className="flex min-h-screen flex-col justify-between">
-				<header className="container py-6">
-					<nav className="flex flex-wrap items-center justify-between gap-4 sm:flex-nowrap md:gap-8">
-						<Logo />
-					</nav>
+			<div className="flex min-h-screen flex-col">
+				<header>
+					<div className="container flex flex-wrap items-center justify-between gap-4 py-6 md:gap-8">
+						<Link
+							to="/"
+							className="focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:outline-none"
+						>
+							<Wordmark className="text-[1.6rem] sm:text-[2rem]" animate />
+						</Link>
+						<p className="eyebrow flex items-center gap-2">
+							<span
+								aria-hidden="true"
+								className="bg-signal inline-block size-[7px]"
+							/>
+							Agenten aktiv
+						</p>
+					</div>
+					<FaultLine at={0.38} className="container" />
 				</header>
 
 				<div className="flex flex-1 flex-col">
 					<Outlet />
 				</div>
 
-				<div className="container flex justify-between pb-5">
-					<Logo />
+				<footer className="border-steel-lt container mt-16 flex flex-wrap items-center justify-between gap-4 border-t py-8">
+					<p className="eyebrow">
+						Umbruch.AI · gesetzt in Martian Mono, JetBrains Mono, Newsreader
+					</p>
 					<ThemeSwitch userPreference={data.requestInfo.userPrefs.theme} />
-				</div>
+				</footer>
 			</div>
 			<UmbruchProgress />
 		</OpenImgContextProvider>
-	)
-}
-
-function Logo() {
-	return (
-		<Link to="/" className="group grid leading-snug">
-			<span className="font-light transition group-hover:-translate-x-1">
-				umbruch
-			</span>
-			<span className="font-bold transition group-hover:translate-x-1">ai</span>
-		</Link>
 	)
 }
 

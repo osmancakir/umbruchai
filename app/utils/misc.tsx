@@ -3,7 +3,7 @@ import { type GetSrcArgs, defaultGetSrc } from 'openimg/react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useFormAction, useNavigation } from 'react-router'
 import { useSpinDelay } from 'spin-delay'
-import { twMerge } from 'tailwind-merge'
+import { extendTailwindMerge } from 'tailwind-merge'
 
 export function getImgSrc({
 	height,
@@ -45,6 +45,54 @@ export function getErrorMessage(error: unknown) {
 	console.error('Unable to get error message for error', error)
 	return 'Unknown Error'
 }
+
+/**
+ * tailwind-merge only knows the stock theme, so our own font sizes, colors and
+ * families have to be declared. Without this it reads `text-terminal-tx` as a
+ * font size and silently drops it when a real one follows.
+ */
+const twMerge = extendTailwindMerge({
+	extend: {
+		theme: {
+			color: [
+				'paper',
+				'ink',
+				'signal',
+				'signal-dim',
+				'steel',
+				'steel-lt',
+				'terminal',
+				'terminal-tx',
+				'input-invalid',
+				'foreground-destructive',
+			],
+			font: ['display', 'system', 'reading'],
+			text: [
+				'brand-xxl',
+				'brand-xl',
+				'brand-lg',
+				'brand-md',
+				'brand-sm',
+				'mega',
+				'h1',
+				'h2',
+				'h3',
+				'h4',
+				'h5',
+				'h6',
+				'body-2xl',
+				'body-xl',
+				'body-lg',
+				'body-md',
+				'body-sm',
+				'body-xs',
+				'body-2xs',
+				'caption',
+				'button',
+			],
+		},
+	},
+})
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs))

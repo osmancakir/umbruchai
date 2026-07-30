@@ -1,76 +1,102 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@import './fonts.css';
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * Brand tokens — docs/brand/brand-design.html §08.
+ * The palette below is the brand; everything under "semantic" is an alias so
+ * that shadcn-derived components inherit it without knowing about it.
+ */
 :root {
-	--radius: 0.5rem;
+	/* color */
+	--paper: #f5f5f1; /* backgrounds — cool bone */
+	--ink: #16181a; /* text, rules — blue-black */
+	--signal: #ff4400; /* fracture, live, agents. large only */
+	--signal-dim: #ffe4d8; /* highlights, diffs */
+	--steel: #6b7280; /* metadata */
+	--steel-lt: #d6d8d3; /* hairlines, borders */
+	--terminal: #101214; /* machine surfaces, dark mode */
+	--terminal-tx: #e8e9e4;
 
-	--background: oklch(100% 0 0);
-	--foreground: oklch(13.71% 0.036 258.53);
+	/* structure */
+	--radius: 0; /* non-negotiable */
+	--fault-step: 6px; /* the break height */
+	--break-offset: 0.14em; /* wordmark drop */
 
-	--card: oklch(100% 0 0);
-	--card-foreground: oklch(13.71% 0.036 258.53);
+	/* semantic */
+	--background: var(--paper);
+	--foreground: var(--ink);
 
-	--popover: oklch(100% 0 0);
-	--popover-foreground: oklch(13.71% 0.036 258.53);
+	--card: var(--paper);
+	--card-foreground: var(--ink);
 
-	--primary: oklch(20.79% 0.0399 265.73);
-	--primary-foreground: oklch(98.38% 0.0035 247.86);
+	--popover: var(--paper);
+	--popover-foreground: var(--ink);
 
-	--secondary: oklch(86.48% 0.0153 248);
-	--secondary-foreground: oklch(20.79% 0.0399 265.73);
+	--primary: var(--ink);
+	--primary-foreground: var(--paper);
 
-	--muted: oklch(94.32% 0.0123 247.96);
-	--muted-foreground: oklch(40.68% 0.0281 257.44);
+	--secondary: var(--steel-lt);
+	--secondary-foreground: var(--ink);
 
-	--accent: oklch(91.87% 0.01770618193703561 248.02064625050508);
-	--accent-foreground: oklch(20.79% 0.0399 265.73);
+	--muted: #ecece8;
+	--muted-foreground: var(--steel);
 
-	--border: oklch(92.9% 0.0126 255.53);
-	--input: oklch(92.56% 0.0133 255.54);
-	--input-invalid: oklch(63.68% 0.2078 25.33);
+	--accent: var(--signal-dim);
+	--accent-foreground: var(--ink);
 
-	--destructive: oklch(57.14% 0.2121 27.25);
-	--destructive-foreground: oklch(98.38% 0.0035 247.86);
+	--border: var(--steel-lt);
+	--input: var(--steel-lt);
+	--input-invalid: #b3261e;
+
+	--destructive: #b3261e;
+	--destructive-foreground: var(--paper);
 	/* prefixed with foreground because it should look good on the background */
-	--foreground-destructive: oklch(51.46% 0.1979 16.57);
+	--foreground-destructive: #8f1d17;
 
-	--ring: oklch(71.07% 0.0351 256.79);
+	--ring: var(--ink);
 }
 
+/* Dark mode is the Terminal surface: the machine side of the system. */
 .dark {
-	--background: oklch(13.71% 0.036 258.53);
-	--foreground: oklch(98.38% 0.0035 247.86);
+	/* Steel lightens on Terminal — #6b7280 only reaches 3.7:1 there, and it
+	   carries small metadata type. Every other brand value is unchanged. */
+	--steel: #9ba0a5;
+	--steel-lt: #2a2d30;
 
-	--card: oklch(13.71% 0.036 258.53);
-	--card-foreground: oklch(98.38% 0.0035 247.86);
+	--background: var(--terminal);
+	--foreground: var(--terminal-tx);
 
-	--popover: oklch(13.71% 0.036 258.53);
-	--popover-foreground: oklch(98.38% 0.0035 247.86);
+	--card: var(--terminal);
+	--card-foreground: var(--terminal-tx);
 
-	--primary: oklch(98.38% 0.0035 247.86);
-	--primary-foreground: oklch(20.79% 0.0399 265.73);
+	--popover: var(--terminal);
+	--popover-foreground: var(--terminal-tx);
 
-	--secondary: oklch(34.74% 0.0295 260.13);
-	--secondary-foreground: oklch(98.38% 0.0035 247.86);
+	--primary: var(--terminal-tx);
+	--primary-foreground: var(--terminal);
 
-	--muted: oklch(22.6% 0.0267 260.02);
-	--muted-foreground: oklch(71.07% 0.0351 256.79);
+	--secondary: #2a2d30;
+	--secondary-foreground: var(--terminal-tx);
 
-	--accent: oklch(20.56% 0.022816 260.0464);
-	--accent-foreground: oklch(98.38% 0.0035 247.86);
+	--muted: #1a1d1f;
+	--muted-foreground: #9ba0a5;
 
-	--border: oklch(28% 0.0369 259.97);
-	--input: oklch(28% 0.0369 259.97);
-	--input-invalid: oklch(39.59% 0.1331 25.72);
+	--accent: #2a2d30;
+	--accent-foreground: var(--terminal-tx);
 
-	--destructive: oklch(47.6% 0.159 25.64);
-	--destructive-foreground: oklch(97.1% 0.0127 17.38);
+	--border: #2a2d30;
+	--input: #2a2d30;
+	--input-invalid: #e0564c;
+
+	--destructive: #e0564c;
+	--destructive-foreground: var(--terminal);
 	/* prefixed with foreground because it should look good on the background */
-	--foreground-destructive: oklch(63.72% 0.2071 21.89);
+	--foreground-destructive: #e87a71;
 
-	--ring: oklch(65.28% 0.0684 260.07);
+	--ring: var(--terminal-tx);
 }
 
 @theme inline {
@@ -99,9 +125,40 @@
 	--color-input-invalid: var(--input-invalid);
 	--color-destructive-foreground: var(--destructive-foreground);
 	--color-foreground-destructive: var(--foreground-destructive);
+
+	/* brand palette, addressable directly: bg-paper, text-signal, border-ink… */
+	--color-paper: var(--paper);
+	--color-ink: var(--ink);
+	--color-signal: var(--signal);
+	--color-signal-dim: var(--signal-dim);
+	--color-steel: var(--steel);
+	--color-steel-lt: var(--steel-lt);
+	--color-terminal: var(--terminal);
+	--color-terminal-tx: var(--terminal-tx);
 }
 
 @theme {
+	/* The editorial contract: machines speak in mono, reading happens in serif */
+	--font-display: 'Martian Mono', ui-monospace, monospace;
+	--font-system: 'JetBrains Mono', ui-monospace, monospace;
+	--font-reading: 'Newsreader', Georgia, serif;
+	--font-sans: var(--font-system);
+	--font-mono: var(--font-system);
+
+	/* Brand type scale — 1.333 ratio on a 14px base */
+	--text-brand-xxl: 3.7rem;
+	--text-brand-xxl--line-height: 1.02;
+	--text-brand-xxl--font-weight: 800;
+	--text-brand-xl: 2.1rem;
+	--text-brand-xl--line-height: 1.15;
+	--text-brand-xl--font-weight: 700;
+	--text-brand-lg: 1.2rem;
+	--text-brand-lg--line-height: 1.6;
+	--text-brand-md: 0.875rem;
+	--text-brand-md--line-height: 1.65;
+	--text-brand-sm: 0.69rem;
+	--text-brand-sm--line-height: 1.5;
+
 	--text-mega: 5rem;
 	--text-mega--line-height: 5.25rem;
 	--text-mega--font-weight: 700;
@@ -147,6 +204,29 @@
 	--animate-slide-left: slide-left 0.3s ease-out;
 	--animate-slide-top: slide-top 0.3s ease-out;
 	--animate-caret-blink: caret-blink 1.25s ease-out infinite;
+	/* the one sanctioned brand gesture — §07. Once, 120ms, never loops. */
+	--animate-break-in: break-in 0.12s ease-out both;
+	--animate-fault-draw: fault-draw 0.3s ease-out backwards;
+
+	@keyframes break-in {
+		from {
+			transform: translateY(0);
+		}
+
+		to {
+			transform: translateY(var(--break-offset));
+		}
+	}
+
+	@keyframes fault-draw {
+		from {
+			clip-path: inset(0 100% 0 0);
+		}
+
+		to {
+			clip-path: inset(0 0 0 0);
+		}
+	}
 
 	@keyframes roll-reveal {
 		from {
@@ -215,6 +295,34 @@
 	::before,
 	::backdrop,
 	::file-selector-button {
-		border-color: hsl(var(--border));
+		border-color: var(--border);
 	}
+
+	::selection {
+		background: var(--signal);
+		color: var(--paper);
+	}
+
+	/* Nothing loops, nothing floats, nothing parallaxes — and none of it runs
+	   for readers who asked for stillness. §07 */
+	@media (prefers-reduced-motion: reduce) {
+		*,
+		::before,
+		::after {
+			animation-duration: 0.01ms !important;
+			animation-iteration-count: 1 !important;
+			transition-duration: 0.01ms !important;
+			scroll-behavior: auto !important;
+		}
+	}
+}
+
+/* The eyebrow: 11px letterspaced caps in Steel. Used for every label,
+   timestamp and section number in the system. §04 */
+@utility eyebrow {
+	font-family: var(--font-system);
+	font-size: 0.69rem;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: var(--steel);
 }

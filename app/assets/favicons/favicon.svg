@@ -1,13 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" fill="none" viewBox="0 0 65 65">
-  <style>
-    path {
-      fill: #000;
-    }
-    @media (prefers-color-scheme: dark) {
-      path {
-        fill: #FFF;
-      }
-    }
-  </style>
-  <path d="M39.445 25.555 37 17.163 65 0 47.821 28l-8.376-2.445Zm-13.89 0L28 17.163 0 0l17.179 28 8.376-2.445Zm13.89 13.89L37 47.837 65 65 47.821 37l-8.376 2.445Zm-13.89 0L28 47.837 0 65l17.179-28 8.376 2.445Z"></path>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <!-- U⌐ — the compact mark on a 64px grid. See docs/brand/brand-design.html §02 -->
+  <rect width="64" height="64" fill="#16181A"/>
+  <!-- U -->
+  <path d="M14 15v22a12 12 0 0 0 12 12h0a12 12 0 0 0 12-12V15" fill="none" stroke="#F5F5F1" stroke-width="8"/>
+  <!-- the fracture mark -->
+  <path d="M54 26H44v10" fill="none" stroke="#FF4400" stroke-width="8"/>
 </svg>

@@ -5,6 +5,8 @@ so time goes into building features rather than re-litigating setup decisions.
 
 # Top Pages
 
+- [Brand](./brand/README.md) - The brand design document, and where each of its
+  rules lives in code.
 - [Getting Started](./getting-started.md) - Instructions for how to get started
   with Umbruch AI.
 - [Features](./features.md) - List of features Umbruch AI provides out of the

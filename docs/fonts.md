@@ -1,8 +1,14 @@
 # Fonts
 
-Umbruch AI uses the default font that comes with Tailwind CSS. This is a good
-default font but you may want to use a custom font for your site and it's easy
-to do so.
+Umbruch AI ships three self-hosted typefaces, one per voice in the brand's
+editorial contract: **Martian Mono** (display), **JetBrains Mono** (system, also
+the default sans) and **Newsreader** (reading). They live in `./public/fonts` as
+latin and latin-ext variable `woff2` cuts, are declared in
+`./app/styles/fonts.css`, and are exposed as the `font-display`, `font-system`
+and `font-reading` utilities. See [the brand docs](./brand/README.md) for when
+to use which.
+
+The rest of this page describes how to add another font, should you need one.
 
 ## Using Custom Fonts
 

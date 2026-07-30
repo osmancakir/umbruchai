@@ -148,6 +148,11 @@ if (IS_DEV) {
 			fallthrough: false,
 		}),
 	)
+	// Fonts are content-stable — a new cut ships under a new filename.
+	app.use(
+		'/fonts',
+		express.static('build/client/fonts', { immutable: true, maxAge: '1y' }),
+	)
 	// Everything else (like favicon.ico) is cached for an hour. You may want to be
 	// more aggressive with this caching.
 	app.use(express.static('build/client', { maxAge: '1h' }))
