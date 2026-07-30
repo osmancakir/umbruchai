@@ -88,4 +88,5 @@ been removed; parts of `docs/` still describe them and are being worked through.
 
 ## License
 
-MIT — see [LICENSE](./LICENSE).
+MIT — see [LICENSE](./LICENSE). Portions derive from the Epic Stack, copyright
+(c) 2023 Kent C. Dodds and contributors, also MIT.
