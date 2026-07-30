@@ -11,8 +11,8 @@ different actions they can take and the meaning of different elements on the
 page. It's pretty well accepted that SVGs are the way to go with icons, but
 there are a few different options for how to go about doing this.
 
-Because the Epic Stack is using React, it may feel obvious to just use a
-component per icon and inline the SVG in the component. This is fine, but it's
+Because Umbruch AI is using React, it may feel obvious to just use a component
+per icon and inline the SVG in the component. This is fine, but it's
 sub-optimal. I'm not going to spend time explaining why, because
 [this article does a great job of that](https://benadam.me/thoughts/react-svg-sprites/).
 

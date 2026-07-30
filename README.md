@@ -1,54 +1,43 @@
 <div align="center">
-  <h1 align="center"><a href="https://www.epicweb.dev/epic-stack">The Epic Stack 🚀</a></h1>
+  <h1 align="center">Umbruch AI 🚀</h1>
   <strong align="center">
-    Ditch analysis paralysis and start shipping Epic Web apps.
+    An opinionated React Router application.
   </strong>
   <p>
-    This is an opinionated project starter and reference that allows teams to
-    ship their ideas to production faster and on a more stable foundation based
-    on the experience of <a href="https://kentcdodds.com">Kent C. Dodds</a> and
-    <a href="https://github.com/epicweb-dev/epic-stack/graphs/contributors">contributors</a>.
+    Built on a production-ready foundation: React Router, Prisma, Tailwind CSS,
+    TypeScript, Playwright and Vitest, deployed to Fly.io.
   </p>
 </div>
 
-```sh
-npx epicli
-```
-
-[![The Epic Stack](https://github-production-user-asset-6210df.s3.amazonaws.com/1500684/246885449-1b00286c-aa3d-44b2-9ef2-04f694eb3592.png)](https://www.epicweb.dev/epic-stack)
-
-[The Epic Stack](https://www.epicweb.dev/epic-stack)
-
 <hr />
 
-## Watch Kent's Introduction to The Epic Stack
+## Getting started
 
-[![Epic Stack Talk slide showing Flynn Rider with knives, the text "I've been around and I've got opinions" and Kent speaking in the corner](https://github-production-user-asset-6210df.s3.amazonaws.com/1500684/277818553-47158e68-4efc-43ae-a477-9d1670d4217d.png)](https://www.epicweb.dev/talks/the-epic-stack)
+```sh
+npm install
+npm run setup
+npm run dev
+```
 
-["The Epic Stack" by Kent C. Dodds](https://www.epicweb.dev/talks/the-epic-stack)
+See the [Getting Started guide](./docs/getting-started.md) for the full walk
+through, including environment variables and database setup.
 
 ## Docs
 
-[Read the docs](https://github.com/epicweb-dev/epic-stack/blob/main/docs)
-(please 🙏).
+[Read the docs](./docs) — they cover routing, caching, security, testing,
+deployment and the reasoning behind the architectural
+[decisions](./docs/decisions/README.md).
 
 ## Support
 
-- 🆘 Join the
-  [discussion on GitHub](https://github.com/epicweb-dev/epic-stack/discussions)
-  and the [KCD Community on Discord](https://kcd.im/discord).
-- 💡 Create an
-  [idea discussion](https://github.com/epicweb-dev/epic-stack/discussions/new?category=ideas)
-  for suggestions.
-- 🐛 Open a [GitHub issue](https://github.com/epicweb-dev/epic-stack/issues) to
+- 🐛 Open a [GitHub issue](https://github.com/osmancakir/umbruchai/issues) to
   report a bug.
+- 💡 Start a [discussion](https://github.com/osmancakir/umbruchai/discussions)
+  for ideas and questions.
 
-## Branding
+## Credits
 
-Want to talk about the Epic Stack in a blog post or talk? Great! Here are some
-assets you can use in your material:
-[EpicWeb.dev/brand](https://epicweb.dev/brand)
-
-## Thanks
-
-You rock 🪨
+Umbruch AI started from the
+[Epic Stack](https://github.com/epicweb-dev/epic-stack) by
+[Kent C. Dodds](https://kentcdodds.com) and
+[contributors](https://github.com/epicweb-dev/epic-stack/graphs/contributors).

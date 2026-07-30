@@ -41,7 +41,7 @@ Here are a few things you get today:
 - Error monitoring with [Sentry](https://sentry.io/welcome/)
 - Light/Dark/System mode (without a flash of incorrect theme)
 
-Here are some things that will likely find their way into the Epic Stack (or the
+Here are some things that will likely find their way into Umbruch AI (or the
 docs examples) in the future:
 
 - Logging

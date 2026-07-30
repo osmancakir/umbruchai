@@ -6,7 +6,7 @@ Status: accepted
 
 ## Context
 
-Epic Stack has relied on `remix-flat-routes` to turn the `app/routes` directory
+Umbruch AI has relied on `remix-flat-routes` to turn the `app/routes` directory
 into the route manifest React Router consumes at build time. The library helped
 us introduce file-system routing with predictable conventions and has served the
 project well. However, its hybrid convention with `+` suffix treats colocation

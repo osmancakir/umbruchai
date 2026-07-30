@@ -6,7 +6,7 @@ Status: accepted
 
 ## Context
 
-Originally, the Epic Stack had a `role` and `permission` model which was quite
+Originally, Umbruch AI had a `role` and `permission` model which was quite
 limited in its use case. It was not very useful and not based on any real world
 scenario:
 
@@ -78,7 +78,7 @@ permission to perform an action and disallow them from doing so if they do not.
 
 ## Consequences
 
-This is a breaking change for the Epic Stack. Anyone wanting to adopt this
+This is a breaking change for Umbruch AI. Anyone wanting to adopt this
 permissions model will need to perform a database migration. However, it's
 important that we make this change now because the previous model was not great.
 This one is.

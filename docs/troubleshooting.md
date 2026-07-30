@@ -35,16 +35,15 @@ be done in the `server/index.ts` file.
 
 ## Missing Icons
 
-Epic Stack uses SVG sprite icons for performance reasons. If you've received an
+Umbruch AI uses SVG sprite icons for performance reasons. If you've received an
 error like this during local development:
 
 > X [ERROR] Could not resolve "#app/components/ui/icon.tsx"
 
 You need to be manually regenerate the icon with `npm run build`.
 
-See
-[the icons decision document](https://github.com/epicweb-dev/epic-stack/blob/main/docs/decisions/020-icons.md)
-for more information about icons.
+See [the icons decision document](./decisions/020-icons.md) for more information
+about icons.
 
 ## Hydration Mismatch
 
@@ -67,7 +66,7 @@ that only affects development). The browser strips the `nonce` from the DOM
 before executing any JavaScript for security reasons and React handles this
 fine.
 
-Browser extensions are notorious for causing hydration errors in the Epic Stack.
+Browser extensions are notorious for causing hydration errors in Umbruch AI.
 This is because we're using React to hydrate the entire document and many
 browser extensions add content to the `<head>` which triggers a hydration error.
 

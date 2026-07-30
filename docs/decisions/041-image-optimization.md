@@ -6,14 +6,14 @@ Status: accepted
 
 ## Context
 
-As documented in [018-images.md](./018-images.md), the Epic Stack previously
-didn't implement image optimization. Both static app images and dynamic user
-images were served as is. However, optimizing images significantly improves web
+As documented in [018-images.md](./018-images.md), Umbruch AI previously didn't
+implement image optimization. Both static app images and dynamic user images
+were served as is. However, optimizing images significantly improves web
 performance by reducing both the browser load time and the byte size of each
-image. On the other hand, one of the guiding principles of the Epic Stack is to
+image. On the other hand, one of the guiding principles of Umbruch AI is to
 limit services (including the self-managed variety). A great middle ground is to
 integrate a simple image optimization solution directly into the web server.
-This allows each Epic Stack app to immediately utilize image optimization and
+This allows each Umbruch AI app to immediately utilize image optimization and
 serve better web experiences without prescribing a service.
 
 On-demand image optimization with a image optimization endpoint should be

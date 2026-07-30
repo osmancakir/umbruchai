@@ -64,7 +64,7 @@ easier debugging of server-side code in production.
 
 ## Consequences
 
-Developers using the Epic Stack will see an warning message during the build and
-if they don't practice good secret "hygiene" they may be vulnerable to attacks.
-So we'll add documentation explaining how to properly use environment variables
-for secrets and not hard-code them into your source code.
+Developers using Umbruch AI will see an warning message during the build and if
+they don't practice good secret "hygiene" they may be vulnerable to attacks. So
+we'll add documentation explaining how to properly use environment variables for
+secrets and not hard-code them into your source code.

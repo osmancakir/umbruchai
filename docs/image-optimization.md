@@ -1,7 +1,7 @@
 # Image Optimization
 
-The Epic Stack uses [openimg](https://github.com/andrelandgraf/openimg) to
-optimize images on demand, introduced via
+Umbruch AI uses [openimg](https://github.com/andrelandgraf/openimg) to optimize
+images on demand, introduced via
 [this decision doc](./decisions/041-image-optimization.md).
 
 ## Server Part

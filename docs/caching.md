@@ -1,8 +1,8 @@
 # Caching
 
-The Epic Stack comes with caching utilities and a management dashboard that
-allows you to view and clear your cache. There are two caches built into the
-Epic Stack:
+Umbruch AI comes with caching utilities and a management dashboard that allows
+you to view and clear your cache. There are two caches built into the Umbruch
+AI:
 
 - **SQLite**: This is a separate database from the main application database.
   It's managed by LiteFS so the data is replicated across all instances of your

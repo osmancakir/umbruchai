@@ -1,4 +1,3 @@
-import path from 'node:path'
 import { reactRouter } from '@react-router/dev/vite'
 import {
 	type SentryReactRouterBuildOptions,
@@ -13,17 +12,6 @@ import { iconsSpritesheet } from 'vite-plugin-icons-spritesheet'
 export default defineConfig((config) => {
 	const mode = config.mode ?? process.env.NODE_ENV
 	const isTest = mode === 'test' || Boolean(process.env.VITEST)
-	const cacheServerStubPlugin = {
-		name: 'vitest-cache-server-stub',
-		enforce: 'pre' as const,
-		resolveId(source: string) {
-			if (!process.env.VITEST) return null
-			if (source.endsWith('cache.server.ts')) {
-				return path.resolve('tests/mocks/cache-server.ts')
-			}
-			return null
-		},
-	}
 	return {
 		build: {
 			target: 'es2022',
@@ -52,7 +40,6 @@ export default defineConfig((config) => {
 		},
 		sentryConfig,
 		plugins: [
-			cacheServerStubPlugin,
 			envOnlyMacros(),
 			tailwindcss(),
 			reactRouterDevTools(),
@@ -74,7 +61,6 @@ export default defineConfig((config) => {
 		test: {
 			include: ['./app/**/*.test.{ts,tsx}'],
 			setupFiles: ['./tests/setup/setup-test-env.ts'],
-			globalSetup: ['./tests/setup/global-setup.ts'],
 			restoreMocks: true,
 			coverage: {
 				include: ['app/**/*.{ts,tsx}'],

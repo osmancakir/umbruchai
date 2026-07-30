@@ -1,8 +1,7 @@
 # Monitoring
 
-This document describes how to get [Sentry](https://sentry.io/) (the Epic
-application monitoring provider) set up for error, performance, and replay
-monitoring.
+This document describes how to get [Sentry](https://sentry.io/) (the application
+monitoring provider) set up for error, performance, and replay monitoring.
 
 > **NOTE**: this is an optional step and only needed if you want monitoring in
 > production.

@@ -54,9 +54,9 @@ of the repo with `#<dirname>/<filepath>`.
 
 This is unfortunately _very_ soon after making the decision to drop the alias.
 
-If someone wants to use the Epic Stack without Node.js, and their runtime
-doesn't support `package.json` imports (I'm not sure whether other runtimes do
-or not) they'll have to continue using the paths configuration. But that's not a
+If someone wants to use Umbruch AI without Node.js, and their runtime doesn't
+support `package.json` imports (I'm not sure whether other runtimes do or not)
+they'll have to continue using the paths configuration. But that's not a
 consideration here.
 
 ## Credits

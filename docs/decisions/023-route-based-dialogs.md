@@ -26,9 +26,9 @@ but when you refresh the page you see that image's page. This is an intentional
 decision by them and I'm sure they weighed the pros and cons for this UX.
 However, it's not often this is a good user experience.
 
-Until today, the Epic Stack used route-based dialogs for the 2FA flow and the
-avatar edit experience. I like using routes for these so it's easy to link the
-user directly to these pages and makes it easier to navigate in and out of them.
+Until today, Umbruch AI used route-based dialogs for the 2FA flow and the avatar
+edit experience. I like using routes for these so it's easy to link the user
+directly to these pages and makes it easier to navigate in and out of them.
 
 These are definitely not a good use of route-based dialogs. It certainly doesn't
 make sense to render it as a dialog for a client-navigation but something else
@@ -36,7 +36,7 @@ for landing on that page like unsplash does for its images.
 
 ## Decision
 
-Remove route-based dialogs from the Epic Stack.
+Remove route-based dialogs from Umbruch AI.
 
 ## Consequences
 

@@ -6,7 +6,7 @@ Status: accepted
 
 ## Context
 
-At the start of Epic Stack, we were using
+At the start of Umbruch AI, we were using
 [remix-auth-form](https://github.com/sergiodxa/remix-auth-form) for our
 username/password auth solution. This worked fine, but it really didn't give us
 any value over handling the auth song-and-dance ourselves.

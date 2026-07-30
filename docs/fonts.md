@@ -1,8 +1,8 @@
 # Fonts
 
-The Epic Stack uses the default font that comes with Tailwind CSS. This is a
-good default font but you may want to use a custom font for your site and it's
-easy to do so.
+Umbruch AI uses the default font that comes with Tailwind CSS. This is a good
+default font but you may want to use a custom font for your site and it's easy
+to do so.
 
 ## Using Custom Fonts
 
@@ -83,7 +83,7 @@ the font. This is because the browser doesn't know the dimensions of the font
 you're using until it arrives, which introduces Cumulative Layout Shift and
 impact its web vitals.
 
-In Epic Stack, we fixed this by introducing
+In Umbruch AI, we fixed this by introducing
 [Font Metric Overrides](https://github.com/epicweb-dev/epic-stack/pull/128/files).
 
 Follow the steps below to add Font Metric Overrides to your custom fonts.

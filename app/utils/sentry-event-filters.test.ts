@@ -44,7 +44,7 @@ test('shouldDropErrorEvent reads exception values', () => {
 	).toBe(false)
 })
 
-test('isHealthcheckTransaction matches url, header, and orphaned prisma dsc', () => {
+test('isHealthcheckTransaction matches url, header, and orphaned span dsc', () => {
 	expect(
 		isHealthcheckTransaction({
 			request: { url: 'http://127.0.0.1:8080/resources/healthcheck' },
@@ -57,7 +57,7 @@ test('isHealthcheckTransaction matches url, header, and orphaned prisma dsc', ()
 	).toBe(true)
 	expect(
 		isHealthcheckTransaction({
-			transaction: 'prisma:client:operation',
+			transaction: 'http.client',
 			tags: { url: 'http://172.19.14.2:8080/resources/healthcheck' },
 			contexts: {
 				trace: {

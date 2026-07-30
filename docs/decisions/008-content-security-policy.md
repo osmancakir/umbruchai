@@ -25,8 +25,8 @@ for configuring security headers.
 
 ## Consequences
 
-Applications using the Epic Stack will start with a safer default configuration
-for their CSP. It's pretty simple to add additional sources to the CSP as
-needed, but it could definitely be confusing for folks who are unaware of the
-CSP to load resources. Documentation will be needed to help people understand
-what to do when they get CSP errors.
+Applications using Umbruch AI will start with a safer default configuration for
+their CSP. It's pretty simple to add additional sources to the CSP as needed,
+but it could definitely be confusing for folks who are unaware of the CSP to
+load resources. Documentation will be needed to help people understand what to
+do when they get CSP errors.

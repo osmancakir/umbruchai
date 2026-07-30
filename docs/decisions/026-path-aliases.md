@@ -10,8 +10,8 @@ It's pretty common to configure TypeScript to have path aliases for imports.
 This allows you to avoid relative imports and makes it easier to move files
 around without having to update imports.
 
-When the Epic Stack started, we used path imports that were similar to those in
-the rest of the Remix ecosystem: `#` referenced the `app/` directory. We added
+When Umbruch AI started, we used path imports that were similar to those in the
+rest of the Remix ecosystem: `#` referenced the `app/` directory. We added
 `tests/` to make it easier to import test utils.
 
 However, we've found that this is confusing for new developers. It's not clear

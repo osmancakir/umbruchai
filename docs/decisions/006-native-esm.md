@@ -27,7 +27,7 @@ This is hopefully a temporary problem.
 
 ## Decision
 
-We're adopting ESM as the default module system for the Epic Stack.
+We're adopting ESM as the default module system for Umbruch AI.
 
 ## Consequences
 

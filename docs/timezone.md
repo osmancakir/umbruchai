@@ -16,11 +16,11 @@ workarounds:
 - Only render the time from user interaction: Sometimes this is fine, but often
   you're just compromising on UX and you know it.
 
-Thanks to the Epic Stack's built-in support for
-[client hints](./client-hints.md), we can do better! We have a client hint set
-up for the user's timezone. This means you can render the time on the server in
-the user's timezone, and hydrate it in the user's timezone, without any flash of
-incorrect content or hydration errors.
+Thanks to Umbruch AI's built-in support for [client hints](./client-hints.md),
+we can do better! We have a client hint set up for the user's timezone. This
+means you can render the time on the server in the user's timezone, and hydrate
+it in the user's timezone, without any flash of incorrect content or hydration
+errors.
 
 You can use this in a few ways. In server-side only code,
 `getHints(request).timeZone` will be what you're looking for. In UI code, you

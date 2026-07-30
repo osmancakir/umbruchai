@@ -6,8 +6,8 @@ Status: accepted
 
 ## Context
 
-In the Epic Stack we used the Shadcn toast implementation. This worked ok, but
-it did require a lot of custom code for ourselves and did a poor job of managing
+In Umbruch AI we used the Shadcn toast implementation. This worked ok, but it
+did require a lot of custom code for ourselves and did a poor job of managing
 multiple toast messages.
 
 We also had a shared `flash` session implementation for both toasts and
@@ -31,6 +31,6 @@ continue to use a regular session, but confetti will be a much simpler cookie.
 
 This will limit the level of customizability because we're now relying on a
 library for managing toast messages, however it also reduces the maintenance
-burden for users of the Epic Stack.
+burden for users of Umbruch AI.
 
 This will also simplify the confetti implementation.

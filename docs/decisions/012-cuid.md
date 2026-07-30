@@ -63,9 +63,9 @@ proven track record.
 </details>
 
 That pretty much checks out for my understanding of the debate. The primary
-benefit of CUIDs for the Epic Stack is their emphasis on collision resistance
-which is good for distributed systems (which is the Epic Stack). Also, it's nice
-to keep things smaller and more readable.
+benefit of CUIDs for Umbruch AI is their emphasis on collision resistance which
+is good for distributed systems (which is Umbruch AI). Also, it's nice to keep
+things smaller and more readable.
 
 ## Decision
 

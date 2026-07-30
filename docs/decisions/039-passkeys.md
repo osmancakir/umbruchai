@@ -6,7 +6,7 @@ Status: accepted
 
 ## Context
 
-The Epic Stack has traditionally supported two primary authentication methods:
+Umbruch AI has traditionally supported two primary authentication methods:
 username/password and OAuth providers. While these methods are widely used, they
 come with various security challenges:
 
@@ -80,7 +80,7 @@ while ensuring no users are left behind.
 
 ## Decision
 
-We will implement passkey support in the Epic Stack using the SimpleWebAuthn
+We will implement passkey support in Umbruch AI using the SimpleWebAuthn
 libraries (@simplewebauthn/server and @simplewebauthn/browser) which provide a
 robust implementation of the WebAuthn standard. The implementation will:
 

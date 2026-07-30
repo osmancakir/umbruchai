@@ -24,26 +24,25 @@ on a separate machine that's dedicated to this task.
 
 I don't want to have that machine running in my closet, so instead we need to
 look to outside services for managing this for us. There are many such services.
-Most of the target audience of the Epic Stack are familiar with GitHub and many
-use it already for other projects. The vast majority already have accounts on
-GitHub as well.
+Most of the target audience of Umbruch AI are familiar with GitHub and many use
+it already for other projects. The vast majority already have accounts on GitHub
+as well.
 
 GitHub has a CI service called
 [GitHub Actions](https://docs.github.com/en/actions) which satisfies all the
-necessary use cases for the Epic Stack. It does not require an additional
-account, though it does necessitate you use GitHub for hosting the code. Also,
-it is free for open source projects, but paid for private projects.
+necessary use cases for Umbruch AI. It does not require an additional account,
+though it does necessitate you use GitHub for hosting the code. Also, it is free
+for open source projects, but paid for private projects.
 
 ## Decision
 
-We've decided to use GitHub Actions for Continuous Integration in the Epic
-Stack. We have a single action that handles running linting, type checking,
-tests, and deployment to both staging (`dev` branch) and production (`main`
-branch).
+We've decided to use GitHub Actions for Continuous Integration in Umbruch AI. We
+have a single action that handles running linting, type checking, tests, and
+deployment to both staging (`dev` branch) and production (`main` branch).
 
 ## Consequences
 
-This means users of the Epic Stack must host their repositories within GitHub
-and pay for private repositories. This reduces the number of extra services
-users of the Epic Stack need to sign up for since the vast majority already have
-accounts with GitHub anyway.
+This means users of Umbruch AI must host their repositories within GitHub and
+pay for private repositories. This reduces the number of extra services users of
+Umbruch AI need to sign up for since the vast majority already have accounts
+with GitHub anyway.

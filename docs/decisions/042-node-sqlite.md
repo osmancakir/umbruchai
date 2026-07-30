@@ -6,11 +6,11 @@ Status: accepted
 
 ## Context
 
-The Epic Stack previously used `better-sqlite3` as the SQLite driver for
-Node.js. While `better-sqlite3` is a mature and feature-rich library, Node.js
-has recently added built-in SQLite support through the `node:sqlite3` module.
-This built-in support provides a simpler, more maintainable solution that
-doesn't require additional dependencies.
+Umbruch AI previously used `better-sqlite3` as the SQLite driver for Node.js.
+While `better-sqlite3` is a mature and feature-rich library, Node.js has
+recently added built-in SQLite support through the `node:sqlite3` module. This
+built-in support provides a simpler, more maintainable solution that doesn't
+require additional dependencies.
 
 The built-in SQLite support in Node.js is based on the same underlying SQLite
 engine, ensuring compatibility with our existing database schema and queries. It

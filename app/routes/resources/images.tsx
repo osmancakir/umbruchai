@@ -1,29 +1,9 @@
-import { promises as fs, constants } from 'node:fs'
 import { invariantResponse } from '@epic-web/invariant'
 import { getImgResponse } from 'openimg/node'
 import { getDomainUrl } from '#app/utils/misc.tsx'
-import { getSignedGetRequestInfo } from '#app/utils/storage.server.ts'
 import { type Route } from './+types/images'
 
-let cacheDir: string | null = null
-
-async function getCacheDir() {
-	if (cacheDir) return cacheDir
-
-	let dir = './tests/fixtures/openimg'
-	if (process.env.NODE_ENV === 'production') {
-		const isAccessible = await fs
-			.access('/data', constants.W_OK)
-			.then(() => true)
-			.catch(() => false)
-
-		if (isAccessible) {
-			dir = '/data/images'
-		}
-	}
-
-	return (cacheDir = dir)
-}
+const CACHE_DIR = './node_modules/.cache/openimg'
 
 export async function loader({ request }: Route.LoaderArgs) {
 	const url = new URL(request.url)
@@ -32,26 +12,13 @@ export async function loader({ request }: Route.LoaderArgs) {
 	const headers = new Headers()
 	headers.set('Cache-Control', 'public, max-age=31536000, immutable')
 
-	const objectKey = searchParams.get('objectKey')
-
 	return getImgResponse(request, {
 		headers,
-		allowlistedOrigins: [
-			getDomainUrl(request),
-			process.env.AWS_ENDPOINT_URL_S3,
-		].filter(Boolean),
-		cacheFolder: await getCacheDir(),
+		// NOTE: add your CMS asset host here (e.g. https://cdn.sanity.io) so
+		// remote images can be optimized through this endpoint.
+		allowlistedOrigins: [getDomainUrl(request)],
+		cacheFolder: CACHE_DIR,
 		getImgSource: () => {
-			if (objectKey) {
-				const { url: signedUrl, headers: signedHeaders } =
-					getSignedGetRequestInfo(objectKey)
-				return {
-					type: 'fetch',
-					url: signedUrl,
-					headers: signedHeaders,
-				}
-			}
-
 			const src = searchParams.get('src')
 			invariantResponse(src, 'src query parameter is required', { status: 400 })
 

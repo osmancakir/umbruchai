@@ -22,12 +22,11 @@ it's kind of annoying.
 
 ## Decision
 
-Instead of building a sitemap into the template, we'll use
-[an example](/docs/examples.md) people can reference to add a sitemap to their
-Epic Stack sites if they like.
+Instead of building a sitemap into the template, we'll use an example people can
+reference to add a sitemap to their Umbruch AI sites if they like.
 
 ## Consequences
 
-This turns sitemaps into an opt-in for developers using the Epic Stack. Most
-people using the Epic Stack probably don't need a sitemap, and those who do will
-only need a few minutes of following the example to get it working.
+This turns sitemaps into an opt-in for developers using Umbruch AI. Most people
+using Umbruch AI probably don't need a sitemap, and those who do will only need
+a few minutes of following the example to get it working.

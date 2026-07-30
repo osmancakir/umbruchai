@@ -8,7 +8,7 @@ Status: accepted
 
 Many applications require integrating with third party authentication providers.
 For this reason, we want to support the idea of "connections" as a built-in part
-of the Epic Stack.
+of Umbruch AI.
 
 There are many different providers we could support, but many people need to
 support more than just one. By building things in a way that allows us to

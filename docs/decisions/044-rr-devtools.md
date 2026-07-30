@@ -6,11 +6,11 @@ Status: accepted
 
 ## Context
 
-Epic Stack uses React Router for routing. React Router is a powerful library,
+Umbruch AI uses React Router for routing. React Router is a powerful library,
 but it can be difficult to debug and visualize the routing in your application.
 This is especially true when you have a complex routing structure with nested
 routes, dynamic routes, and you rely on data functions like loaders and actions,
-which the Epic Stack does.
+which Umbruch AI does.
 
 It is also hard to know which routes are currently active (which ones are
 rendered) and if any if the loaders are triggered when you expect them to be.
@@ -30,8 +30,8 @@ dispatched.
 
 ## Decision
 
-We will add the React Router DevTools to the Epic Stack. The DevTools will be
-added to the project as a development dependency. The DevTools will be used in
+We will add the React Router DevTools to Umbruch AI. The DevTools will be added
+to the project as a development dependency. The DevTools will be used in
 development mode only.
 
 The DevTools will be used to enhance the following:

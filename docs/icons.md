@@ -1,6 +1,6 @@
 # Icons
 
-The Epic Stack uses SVG sprites for
+Umbruch AI uses SVG sprites for
 [optimal icon performance](https://benadam.me/thoughts/react-svg-sprites/).
 You'll find raw SVGs in the `./other/svg-icons` directory. These are then
 compiled into a sprite using the
@@ -22,11 +22,11 @@ If you don't specify the icons, Sly will show an interactive list of all the
 icons available in the `@radix-ui/icons` collection and let you select the ones
 you want to add.
 
-Sly has been configured in the Epic Stack to automatically add the icons to the
+Sly has been configured in Umbruch AI to automatically add the icons to the
 `./other/svg-icons` directory, so there are no extra steps to take. You can see
 the configuration in the `./other/sly/sly.json` file.
 
-The SVGs used by default in the Epic Stack come from
+The SVGs used by default in Umbruch AI come from
 [icons.radix-ui.com](https://icons.radix-ui.com/). You can download additional
 SVG icons from there, or provide your own. Once you've added new files in the
 directory, run `npm run build` and you can then use the `Icon` component to

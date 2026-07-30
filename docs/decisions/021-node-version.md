@@ -14,9 +14,9 @@ to that documentation to understand how the release cycle works.
 Deciding which version of Node.js to use for a project is a trade-off between
 using the latest features and stability.
 
-The Epic Stack is more focused on stably shipping web apps than experimenting
-with the latest features which is where the Active Long-Term Support (LTS)
-version really shines.
+Umbruch AI is more focused on stably shipping web apps than experimenting with
+the latest features which is where the Active Long-Term Support (LTS) version
+really shines.
 
 We deploy our apps in Docker containers, and there are various base images we
 can use as options which you can find on

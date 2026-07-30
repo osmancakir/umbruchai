@@ -30,7 +30,7 @@ server. Read,
 and
 [User Locale Preferences](https://github.com/romulocintra/user-locale-client-hints).
 However, there's no telling when these features will become standard and
-implemented in all browsers Epic Stack apps target so we cannot rely on this or
+implemented in all browsers Umbruch AI apps target so we cannot rely on this or
 wait for it.
 
 One solution I've used on my personal website is to include a tiny bit of inline

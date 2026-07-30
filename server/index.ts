@@ -25,10 +25,10 @@ const app = express()
 const getHost = (req: { get: (key: string) => string | undefined }) =>
 	req.get('X-Forwarded-Host') ?? req.get('host') ?? ''
 
-// fly is our proxy
+// we sit behind a proxy (CDN / hosting platform)
 app.set('trust proxy', true)
 
-// ensure HTTPS only (X-Forwarded-Proto comes from Fly)
+// ensure HTTPS only (X-Forwarded-Proto comes from the proxy)
 app.use((req, res, next) => {
 	if (req.method !== 'GET') return next()
 	const proto = req.get('X-Forwarded-Proto')
@@ -97,56 +97,16 @@ const rateLimitDefault = {
 	standardHeaders: true,
 	legacyHeaders: false,
 	validate: { trustProxy: false },
-	// Malicious users can spoof their IP address which means we should not default
-	// to trusting req.ip when hosted on Fly.io. However, users cannot spoof Fly-Client-Ip.
-	// When sitting behind a CDN such as cloudflare, replace fly-client-ip with the CDN
-	// specific header such as cf-connecting-ip
+	// Malicious users can spoof their IP address, so don't blindly trust req.ip.
+	// When sitting behind a CDN, prefer the CDN's client IP header (e.g.
+	// cf-connecting-ip for Cloudflare) over the socket address.
 	keyGenerator: (req: express.Request) => {
 		const ip = req.ip ?? req.socket?.remoteAddress
-		return req.get('fly-client-ip') ?? ipKeyGenerator(ip ?? '0.0.0.0')
+		return ipKeyGenerator(ip ?? '0.0.0.0')
 	},
 }
 
-const strongestRateLimit = rateLimit({
-	...rateLimitDefault,
-	windowMs: 60 * 1000,
-	limit: 10 * maxMultiple,
-})
-
-const strongRateLimit = rateLimit({
-	...rateLimitDefault,
-	windowMs: 60 * 1000,
-	limit: 100 * maxMultiple,
-})
-
-const generalRateLimit = rateLimit(rateLimitDefault)
-app.use((req, res, next) => {
-	const strongPaths = [
-		'/login',
-		'/signup',
-		'/verify',
-		'/admin',
-		'/onboarding',
-		'/reset-password',
-		'/settings/profile',
-		'/resources/login',
-		'/resources/verify',
-	]
-	if (req.method !== 'GET' && req.method !== 'HEAD') {
-		if (strongPaths.some((p) => req.path.includes(p))) {
-			return strongestRateLimit(req, res, next)
-		}
-		return strongRateLimit(req, res, next)
-	}
-
-	// the verify route is a special case because it's a GET route that
-	// can have a token in the query string
-	if (req.path.includes('/verify')) {
-		return strongestRateLimit(req, res, next)
-	}
-
-	return generalRateLimit(req, res, next)
-})
+app.use(rateLimit(rateLimitDefault))
 
 if (!ALLOW_INDEXING) {
 	app.use((_, res, next) => {

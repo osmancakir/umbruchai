@@ -2,8 +2,8 @@
 
 ## Updating Node.js
 
-The Epic Stack runs a long-running Node.js server. It defaults to the current
-active LTS version of node
+Umbruch AI runs a long-running Node.js server. It defaults to the current active
+LTS version of node
 ([read the Node.js version decision document](./decisions/021-node-version.md)).
 
 If you wish to change the Node.js version, you can do so by updating the
@@ -28,30 +28,30 @@ as the `package.json` file.
 You'll find the
 [Node.js versions available on Docker Hub](https://hub.docker.com/_/node).
 
-## Within the Epic Stack
+## Within Umbruch AI
 
-When you create a new project with the Epic Stack, a bunch of code is generated
-for you. This code is completely yours and there is no way to update it other
-than making manual changes. This is both a good thing and a bad thing. It's good
-in the sense that you can tweak it to fit your specific use cases. But it's a
-challenge because as the Epic Stack gets improvements there's no way to get
-those automatically. You have to keep track of the improvements in the Epic
-Stack and make those updates yourself.
+Umbruch AI was generated from the
+[Epic Stack](https://github.com/epicweb-dev/epic-stack) template. That code is
+completely yours and there is no way to update it other than making manual
+changes. This is both a good thing and a bad thing. It's good in the sense that
+you can tweak it to fit your specific use cases. But it's a challenge because as
+the upstream template gets improvements there's no way to get those
+automatically. You have to keep track of the improvements and make those updates
+yourself.
 
-You shouldn't feel compelled to keep up-to-date with the latest of the Epic
-Stack template. If what you're using is working fine for you then just keep
-going with it. Only adopt changes as you feel the need to do so. Feel free to
-peruse
-[the Epic Stack's commit history](https://github.com/epicweb-dev/epic-stack/commits/main)
+You shouldn't feel compelled to keep up-to-date with upstream. If what you're
+using is working fine for you then just keep going with it. Only adopt changes
+as you feel the need to do so. Feel free to peruse
+[the upstream commit history](https://github.com/epicweb-dev/epic-stack/commits/main)
 anytime you'd like to see what updates could be made to your project.
 
-Check the [epic-stack field in the package.json file](../package.json) to see
-what the date and commit hash were when you created your project.
+Check the [`epic-stack` field in the package.json file](../package.json) to see
+what the date and commit hash were when this project was generated.
 
 ## How to update NPM dependencies
 
-Another part of the Epic Stack is the dependencies of the project. These you
-will also have to keep up-to-date yourself, but there is a bit of an automated
+Another part of Umbruch AI is the dependencies of the project. These you will
+also have to keep up-to-date yourself, but there is a bit of an automated
 process to help you.
 
 It’s important to update your packages to get new features, bug fixes, and

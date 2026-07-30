@@ -20,17 +20,17 @@ we like. However, that may be more work than we want to take on at first.
 
 ## Decision
 
-We'll set up the Epic Stack to use Sentry and document how you could get it
-running yourself if you prefer to self-host it.
+We'll set up Umbruch AI to use Sentry and document how you could get it running
+yourself if you prefer to self-host it.
 
 We'll also ensure that we defer the setup requirement to later so you can still
-get started with the Epic Stack without monitoring in place which is very useful
-for experiments and makes it easier to remove or adapt to a different solution
-if you so desire.
+get started with Umbruch AI without monitoring in place which is very useful for
+experiments and makes it easier to remove or adapt to a different solution if
+you so desire.
 
 ## Consequences
 
-We tie the Epic Stack to Sentry a bit, but I think that's a solid trade-off for
-the benefit of production error monitoring that Sentry provides. People who need
-the scale where Sentry starts to cost money (https://sentry.io/pricing/) will
+We tie Umbruch AI to Sentry a bit, but I think that's a solid trade-off for the
+benefit of production error monitoring that Sentry provides. People who need the
+scale where Sentry starts to cost money (https://sentry.io/pricing/) will
 probably be making money at that point and will be grateful for the monitoring.

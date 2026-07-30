@@ -6,7 +6,7 @@ Status: accepted
 
 ## Context
 
-The Epic Stack previously stored uploaded images directly in SQLite using binary
+Umbruch AI previously stored uploaded images directly in SQLite using binary
 data storage. While this approach is simple and works well for small
 applications, it has several limitations (as noted in the previous decision
 [018-images.md](docs/decisions/018-images.md)):

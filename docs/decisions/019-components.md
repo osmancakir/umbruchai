@@ -28,7 +28,7 @@ accessible, reusable components, but leaves the styling up to you.
 While it may make sense to just say "let's use web components" I'm going to
 leave the argument against web components to
 [Rich Harris](https://dev.to/richharris/why-i-don-t-use-web-components-2cia)
-(he's right, and it pains me just like it does him). The Epic Stack comes with
+(he's right, and it pains me just like it does him). Umbruch AI comes with
 React, so a component library that leans on React is no problem and actually a
 nice benefit.
 
@@ -37,13 +37,13 @@ of component libraries), I've determined the library that does this best is
 [Radix](https://www.radix-ui.com/). It's a terrific collection of primitive
 components that has a fantastically composable API.
 
-The Epic Stack started with Radix from the start for this reason.
+Umbruch AI started with Radix from the start for this reason.
 
-That leaves us with the decision about how to style things. The Epic Stack
-started with Tailwind for styling (no decision document has been written about
-this choice yet), and shipped with things styled by Tailwind. It has worked
+That leaves us with the decision about how to style things. Umbruch AI started
+with Tailwind for styling (no decision document has been written about this
+choice yet), and shipped with things styled by Tailwind. It has worked
 relatively well, but the structure has been challenging for folks adopting the
-Epic Stack. It's left adopters of the Epic Stack with a lot challenges around
+Umbruch AI. It's left adopters of Umbruch AI with a lot challenges around
 customization.
 
 Customization is always the biggest challenge when it comes to styling
@@ -58,22 +58,22 @@ opinionated with our own opinions! It's built with Tailwind and Radix.
 
 Additionally, while you can easily copy/paste/modify from the website, you can
 also use the CLI to download components as needed. So we can add a configuration
-file to the Epic Stack and the CLI will know exactly where to place files.
+file to Umbruch AI and the CLI will know exactly where to place files.
 
 On top of that, shadcn/ui assumes a Tailwind setup that relies heavily on CSS
 variables for color styles which makes it much easier to adapt to the light/dark
-mode theme of the Epic Stack.
+mode theme of Umbruch AI.
 
 ## Decision
 
 We'll adopt shadcn/ui, Radix, and Tailwind as the UI component solution for the
-Epic Stack. We'll move most of the custom components that are currently in the
-Epic Stack to shadcn/ui components. We'll customize those components as needed.
+Umbruch AI. We'll move most of the custom components that are currently in the
+Umbruch AI to shadcn/ui components. We'll customize those components as needed.
 
 ## Consequences
 
 It's important to keep in mind that because shadcn/ui is not a component
-library, updates for these components are similar to updates in the Epic Stack
+library, updates for these components are similar to updates in Umbruch AI
 itself: manual. There is no way to get automated updates here. And this is
 actually a good thing, even though it's a bit more work. It's a good thing
 because it means that you can customize the components as much as you want

@@ -38,4 +38,4 @@ duplicate configuration.
   `"imports"` field, providing better IDE support
 
 This supersedes [031-imports](./031-imports.md) as the current approach for
-handling imports in the Epic Stack.
+handling imports in Umbruch AI.

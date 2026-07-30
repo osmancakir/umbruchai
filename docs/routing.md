@@ -1,7 +1,7 @@
 # Routing
 
-The Epic Stack uses file-based routing with React Router. However, it's not
-using the built-in routing convention of React Router and instead is using
+Umbruch AI uses file-based routing with React Router. However, it's not using
+the built-in routing convention of React Router and instead is using
 [react-router-auto-routes](https://github.com/kenn/react-router-auto-routes)
 which is a special implementation of the React Router convention that adds a few
 features. You'll find it configured for the application in the `app/routes.ts`
@@ -12,7 +12,7 @@ an important thing for you to know as you get used to this convention is you can
 always run `npx react-router routes` from the root of the app and it will output
 the routes of your application in a JSX-like output that will reveal the routes
 that will be generated based on your current file structure. Here's an example
-of the Epic Stack routes at the time of this writing:
+of Umbruch AI routes at the time of this writing:
 
 ```
 app/routes

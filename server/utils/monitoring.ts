@@ -1,4 +1,3 @@
-import { PrismaInstrumentation } from '@prisma/instrumentation'
 import { nodeProfilingIntegration } from '@sentry/profiling-node'
 import * as Sentry from '@sentry/react-router'
 import {
@@ -26,13 +25,7 @@ export function init() {
 			/did not provide a `loader`/,
 			/^Invalid request method /,
 		],
-		integrations: [
-			Sentry.prismaIntegration({
-				prismaInstrumentation: new PrismaInstrumentation(),
-			}),
-			Sentry.httpIntegration(),
-			nodeProfilingIntegration(),
-		],
+		integrations: [Sentry.httpIntegration(), nodeProfilingIntegration()],
 		tracesSampler(samplingContext) {
 			// ignore healthcheck transactions by other services (consul, etc.)
 			if (samplingContext.request?.url?.includes('/resources/healthcheck')) {
@@ -47,8 +40,7 @@ export function init() {
 			return event
 		},
 		beforeSendTransaction(event) {
-			// Drop Fly/consul healthchecks, including orphaned Prisma spans that
-			// surface as Slow DB Query insights with transaction prisma:client:operation.
+			// Drop healthcheck transactions from uptime monitors.
 			if (isHealthcheckTransaction(event)) {
 				return null
 			}
