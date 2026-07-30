@@ -1,5 +1,6 @@
 {
-  "name": "umbruchai-fa2c",
+  "name": "umbruchai",
+  "license": "MIT",
   "private": true,
   "sideEffects": false,
   "type": "module",
