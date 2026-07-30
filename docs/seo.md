@@ -1,51 +1,57 @@
 # SEO
 
-Remix has built-in support for setting up `meta` tags on a per-route basis which
-you can read about
-[in the Remix Metadata docs](https://remix.run/docs/en/main/route/meta).
+React Router sets `meta` tags per route through the
+[`meta` export](https://reactrouter.com/start/framework/route-module#meta).
 
-Umbruch AI also has built-in support for `/robots.txt` and `/sitemap.xml` via
-[resource routes](https://remix.run/docs/en/main/guides/resource-routes) using
-[`@nasa-gcn/remix-seo`](https://github.com/nasa-gcn/remix-seo). By default, all
-routes are included in the `sitemap.xml` file, but you can configure which
-routes are included using the `handle` export in the route. Only public-facing
-pages should be included in the `sitemap.xml` file.
+`/robots.txt` and `/sitemap.xml` are resource routes in `app/routes/_seo/`, built
+with [`@nasa-gcn/remix-seo`](https://github.com/nasa-gcn/remix-seo). The sitemap
+route walks the route manifest, which is why `workers/app.ts` passes
+`serverBuild` through the load context.
 
-Here are two quick examples of how to customize the sitemap on a per-route basis
-from the `@nasa-gcn/remix-seo` docs:
+## Dynamic routes
+
+Every route is in the sitemap by default, but `generateSitemap` cannot guess the
+slugs behind a dynamic segment. Routes with dynamic children enumerate them
+through a `getSitemapEntries` handle — the archive is the site here, so this is
+what makes the articles discoverable at all:
 
 ```tsx
-// routes/blog/_layout.tsx
-import { type SEOHandle } from '@nasa-gcn/remix-seo'
-import { serverOnly$ } from 'vite-env-only/macros'
-
+// app/routes/articles/$slug.tsx
 export const handle: SEOHandle = {
-	getSitemapEntries: serverOnly$(async (request) => {
-		const blogs = await db.blog.findMany()
-		return blogs.map((blog) => {
-			return { route: `/blog/${blog.slug}`, priority: 0.7 }
-		})
+	getSitemapEntries: serverOnly$(async () => {
+		const articles = await getArticleSitemapEntries()
+		return articles.map((article) => ({
+			route: `/articles/${article.slug}`,
+			lastmod: article.date,
+			changefreq: 'monthly' as const,
+			priority: 0.8 as const,
+		}))
 	}),
 }
 ```
 
-Note the use of
-[`vite-env-only/macros`](https://github.com/pcattori/vite-env-only). This is
-because `handle` is a route export object that goes in both the client as well
-as the server, but our sitemap function should only be run on the server. So we
-use `vite-env-only/macros` to make sure the function is removed for the client
-build. Support for this is pre-configured in the `vite.config.ts` file.
+`handle` is a shared export, so React Router does not strip server code from it
+the way it does for `loader`.
+[`serverOnly$`](https://github.com/pcattori/vite-env-only) does that job instead,
+keeping the Sanity client out of the browser bundle. It is preconfigured in
+`vite.config.ts`.
+
+`app/routes/articles/authors/$authorId.tsx` does the same for author pages.
+
+## Excluding a route
+
+Return `null` to keep a page out of the sitemap:
 
 ```tsx
-// in your routes/url-that-doesnt-need-sitemap
-import { type SEOHandle } from '@nasa-gcn/remix-seo'
-import { type Route } from './+types/sitemap[.]xml.ts'
-
-export async function loader({ request }: Route.LoaderArgs) {
-	/**/
-}
-
 export const handle: SEOHandle = {
 	getSitemapEntries: () => null,
 }
 ```
+
+`app/routes/presentation-referat.tsx` uses this.
+
+## Indexing
+
+`workers/app.ts` sets `X-Robots-Tag: noindex, nofollow` when `ALLOW_INDEXING` is
+`false`, and always for hosts ending in `.workers.dev`, so versioned preview
+deploys never compete with the canonical domain.

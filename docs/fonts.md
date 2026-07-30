@@ -67,17 +67,18 @@ Now you've added your font, there's a few places you need to update to use it.
    { rel: 'stylesheet', href: fontStyleSheetUrl },
    ```
 
-4. Expose and cache your fonts folder.
+4. Caching is already handled. Anything under `public/` is served by Workers
+   Assets without invoking the Worker, and `public/_headers` caches `/fonts/*`
+   for a year as immutable:
 
-   ```ts
-   // server/index.ts
-   ...
-   app.use(
-      '/fonts',
-      // Can aggressively cache fonts as they don't change often
-      express.static('public/fonts', { immutable: true, maxAge: '1y' }),
-   )
    ```
+   # Fonts are content-stable — a new cut ships under a new filename.
+   /fonts/*
+     Cache-Control: public, max-age=31536000, immutable
+   ```
+
+   That is safe because a revised cut ships under a new filename rather than
+   replacing an existing one.
 
 That's it! You can now use your custom font should now be available to use in
 your site.

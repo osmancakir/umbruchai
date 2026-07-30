@@ -1,85 +1,57 @@
 # Security
 
-Umbruch AI has several security measures in place to protect your users and
-yourself. This (incomplete) document, explains some of the security measures
-that are in place and how to use them.
+The attack surface here is small by construction: there are no user accounts, no
+sessions, no passwords and no application database. The only writes a visitor can
+cause are article comments, and those are moderated before anyone else sees them.
 
 ## Content Security Policy
 
-Umbruch AI uses a strict
-[Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP).
-This means that only resources from trusted sources are allowed to be loaded.
-However, by default, the CSP is set to `report-only` which means that the
-browser will report violations of the CSP without actually blocking the
-resource.
+CSP is set per-document in `app/entry.server.tsx` using
+[`@nichtsam/helmet`](https://github.com/nichtsam/helmet). Scripts run under a
+per-request nonce with `'strict-dynamic'`, generated in `createNonce()` and
+threaded through `NonceProvider`.
 
-This is to prevent new users of Umbruch AI from being blocked or surprised by
-the CSP by default. However, it is recommended to enable the CSP in
-`server/index.ts` by removing the `reportOnly: true` option.
+The policy is currently **report-only** — violations are reported but nothing is
+blocked. Remove `reportOnly: true` from the `contentSecurityPolicy` options to
+enforce it. See [decision 008](./decisions/008-content-security-policy.md) and
+[decision 022](./decisions/022-report-only-csp.md) for the background.
 
-## Fly's Internal Network
+The remaining security headers are applied in `workers/app.ts`, where `helmet()`
+runs over the response headers. `referrerPolicy` is disabled there deliberately,
+because it breaks `redirectTo`.
 
-Umbruch AI uses [Fly](https://fly.io) for hosting. Fly has an internal network
-that allows you to connect services to each other without exposing them to the
-public internet. Only services within your organization have access to this
-network, and only accounts in your organization have access as well.
+## Comments
 
-When running multiple instances of Umbruch AI, your instances communicate with
-each other over this internal network. Most of this happens behind the scenes
-with the consul service that Fly manages for us.
+Comments are the only user-generated content. Every submission is parsed with a
+Zod schema before it reaches Sanity, and lands as `status: "pending"` — invisible
+to everyone but its author until it is approved in the Studio. See
+[Content](./content.md).
 
-We also have an endpoint that allows instances to connect to each other to
-update the cache in the primary region. This uses internal URLs for that
-communication (via [`litefs-js`](https://github.com/fly-apps/litefs-js)), but as
-an added layer of security it uses a shared secret to validate the requests.
+Writing requires `SANITY_API_WRITE_TOKEN`. Without it the magazine still renders
+in full; comments simply stop accepting new entries.
 
-> This could be changed if there's a way to determine if a request is coming
-> from the internal network. But I haven't found a way to do that yet. PRs
-> welcome!
+## Rate limiting
 
-Outside of this, Umbruch AI does not access other first-party services or
-databases.
+The app runs on Cloudflare Workers, where an in-process limiter doesn't work —
+each request may hit a different isolate. Rate limiting is therefore a **WAF rate
+limiting rule on the zone**, which runs ahead of the Worker and is keyed on the
+real client IP. There is no rate limiting code in the app; see
+[deployment.md](./deployment.md#rate-limiting) for the rule and its settings.
 
 ## Secrets
 
-The currently recommended policy for managing secrets is to place them in a
-`.env` file in the root of the application (which is `.gitignore`d). There is a
-`.env.example` which can be used as a template for this file (and if you do not
-need to actually connect to real services, this can be used as
-`cp .env.example .env`).
+Local secrets go in `.env`, which is gitignored; `.env.example` lists the
+variables. `app/utils/env.server.ts` validates them with Zod at startup and fails
+loudly if something required is missing.
 
-These secrets need to also be set on Fly using the `fly secrets` command.
+In production they are Cloudflare Worker secrets, set with
+`wrangler secret put NAME` rather than committed to `wrangler.jsonc`. Only the
+values returned by `getEnv()` are exposed to the client — everything else stays
+server-side.
 
-There are significant limitations to this approach and will probably be improved
-in the future.
+## Cross-site scripting
 
-## [Cross-Site Scripting (XSS)](https://developer.mozilla.org/en-US/docs/Glossary/Cross-site_scripting)
-
-React has built-in support for XSS protection. It does this by escaping all
-values by default. This means that if you want to render HTML, you need to use
-the `dangerouslySetInnerHTML` prop. This is a good thing, but it does mean that
-you need to be careful when rendering HTML. Never pass anything that is
-user-generated to this prop.
-
-## [Cross-Site Request Forgery (CSRF)](https://forms.epicweb.dev/07)
-
-Umbruch AI has built-in support to prevent CSRF attacks. We use the
-[`remix-utils`](https://github.com/sergiodxa/remix-utils)
-[CSRF-related utilities](https://github.com/sergiodxa/remix-utils#csrf) to do
-this.
-
-## [Honeypot](https://forms.epicweb.dev/06)
-
-Umbruch AI has built-in support for honeypot fields. We use the
-[`remix-utils`](https://github.com/sergiodxa/remix-utils)
-[honeypot-related utilities](https://github.com/sergiodxa/remix-utils#form-honeypot)
-to do this.
-
-## Rate Limiting
-
-Umbruch AI runs on Cloudflare Workers, where an in-process limiter like
-`express-rate-limit` doesn't work — each request may hit a different isolate.
-Rate limiting is therefore a **WAF rate limiting rule on the zone**, which runs
-ahead of the Worker and is keyed on the real client IP. There is no rate
-limiting code in the app; see [deployment.md](./deployment.md#rate-limiting) for
-the rule and its settings.
+React escapes values by default. Article bodies arrive from Sanity as Portable
+Text and are rendered through `app/components/article/portable-text.tsx`, which
+maps blocks to components rather than injecting HTML. Avoid
+`dangerouslySetInnerHTML`; never pass user-generated content to it.

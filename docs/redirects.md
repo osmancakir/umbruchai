@@ -1,88 +1,35 @@
 # Redirects
 
-We handle redirects in Express. Incoming requests are handled by Express before
-they pass through to Remix, so by redirecting earlier you improve performance.
+Redirects happen in the Worker, in `workers/app.ts`, before React Router is
+asked to render anything. There is no Express layer.
 
-## HTTP to HTTPS
+## One canonical origin
 
-We force all traffic to HTTPS automatically. That way, no part of your
-application is open to request interception. This does not affect localhost, as
-we use Fly's request headers for determining when to redirect.
+`GET` requests are canonicalised to `https://umbruchai.com` with a `301`: http
+becomes https, and `www.umbruchai.com` becomes the apex domain. Cloudflare does
+not send `X-Forwarded-Proto`, so the scheme is read straight off the request URL
+rather than from a header.
 
-```ts
-app.use((req, res, next) => {
-	const proto = req.get('X-Forwarded-Proto')
-	const host = getHost(req)
-	if (proto === 'http') {
-		res.set('X-Forwarded-Proto', 'https')
-		res.redirect(`https://${host}${req.originalUrl}`)
-		return
-	}
-	next()
-})
-```
+`localhost` and `127.0.0.1` are exempt, because `npm run dev` and `npm start`
+both serve plain http locally.
 
-## Remove trailing slashes
+## Trailing slashes
 
-We also remove trailing slashes automatically. A url like
-`https://example.com/foo/` is automatically redirected to
-`https://example.com/foo`.
+`/foo/` redirects to `/foo` with a `302`, and repeated slashes are collapsed.
+Crawlers treat those as distinct URLs, so leaving both live splits a page's
+ranking between duplicates.
 
-This is important for SEO reasons, as website crawlers (like Google) treat these
-as separate URLs and will consider them to be distinct pages with duplicate
-content.
+The root path is left alone.
 
-```ts
-app.use((req, res, next) => {
-	if (req.path.endsWith('/') && req.path.length > 1) {
-		const query = req.url.slice(req.path.length)
-		const safepath = req.path.slice(0, -1).replace(/\/+/g, '/')
-		res.redirect(301, safepath + query)
-	} else {
-		next()
-	}
-})
-```
+## Missing assets
 
-## www subdomains
+Requests under `/img/` and `/favicons/` that reach the Worker return a bare
+`404`. Workers Assets serves real files before the Worker runs, so anything
+arriving here genuinely does not exist — rendering a full React Router 404 for it
+would waste an invocation, and reporting it to Sentry would be noise.
 
-You can redirect root domain traffic to your www subdomain or vice versa.
+## Custom domains
 
-[DNS level redirects do not work with Fly](https://community.fly.io/t/how-to-redirect-from-non-www-to-www/5795/2).
-The recommended way to implement this redirect is in your application code.
-
-First, you will need to register SSL certificates for both the www and the root
-domain. You can
-[register an SSL certificate for your domains in the terminal](https://fly.io/docs/getting-started/working-with-fly-apps/#fly-io-and-custom-domains)
-or in your [Fly dashboard](https://fly.io/dashboard/) by navigating to your app
-and selecting "Certificates" on the sidebar.
-
-After registering the two SSL certificates, Fly will allow traffic from either
-source to hit your application, and then you can redirect to your preferred
-domain in code.
-
-**To redirect non-www traffic to www**
-
-```ts
-app.use((req, res, next) => {
-	const host = getHost(req)
-	if (!host.startsWith('www.')) {
-		return res.redirect(301, `https://www.${host}${req.url}`)
-	} else {
-		next()
-	}
-})
-```
-
-**To redirect www traffic to non-www:**
-
-```ts
-app.use((req, res, next) => {
-	const host = getHost(req)
-	if (host.startsWith('www.')) {
-		return res.redirect(301, `https://${host.slice(4)}${req.url}`)
-	} else {
-		next()
-	}
-})
-```
+Domains and routes are attached to the Worker in `wrangler.jsonc`, and DNS and
+certificates are managed in the Cloudflare dashboard. See
+[Deployment](./deployment.md).

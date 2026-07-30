@@ -6,9 +6,9 @@ Status: accepted
 
 ## Context
 
-As documented in [018-images.md](./018-images.md), Umbruch AI previously didn't
-implement image optimization. Both static app images and dynamic user images
-were served as is. However, optimizing images significantly improves web
+Umbruch AI previously didn't implement image optimization. Both static app
+images and dynamic user images were served as is. However, optimizing images
+significantly improves web
 performance by reducing both the browser load time and the byte size of each
 image. On the other hand, one of the guiding principles of Umbruch AI is to
 limit services (including the self-managed variety). A great middle ground is to

@@ -17,7 +17,7 @@ is disabled by default as of
 however, recommended to be enabled for security reasons.
 
 To fix this, adjust the CSP to allow the resource you're trying to add. This can
-be done in the `server/index.ts` file.
+be done in `app/entry.server.tsx`, where the policy is built.
 
 ```diff
 		contentSecurityPolicy: {
@@ -66,10 +66,7 @@ that only affects development). The browser strips the `nonce` from the DOM
 before executing any JavaScript for security reasons and React handles this
 fine.
 
-Browser extensions are notorious for causing hydration errors in Umbruch AI.
-This is because we're using React to hydrate the entire document and many
-browser extensions add content to the `<head>` which triggers a hydration error.
-
-In React 19, React will no longer have issues with differences in the `<head>`
-so if you upgrade to React 19, you'll likely no longer see hydration errors for
-this reason.
+Browser extensions used to be a common cause here, because React hydrates the
+entire document and many extensions inject content into the `<head>`. React 19
+tolerates differences in the `<head>`, and this app is on React 19, so that
+particular cause should no longer produce errors.

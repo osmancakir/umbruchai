@@ -1,66 +1,45 @@
 # Monitoring
 
-This document describes how to get [Sentry](https://sentry.io/) (the application
-monitoring provider) set up for error, performance, and replay monitoring.
+Errors, performance and session replay go to [Sentry](https://sentry.io/). It is
+optional — without `SENTRY_DSN` the app runs normally and simply reports nothing.
 
-> **NOTE**: this is an optional step and only needed if you want monitoring in
-> production.
+## Where it is wired
 
-## SaaS vs Self-Hosted
+| Layer  | File                             | What it does                                          |
+| ------ | -------------------------------- | ----------------------------------------------------- |
+| Worker | `workers/app.ts`                 | `Sentry.withSentry` wraps the handler                 |
+| Client | `app/utils/monitoring.client.tsx` | `Sentry.init` with browser tracing and replay         |
+| Build  | `vite.config.ts`                 | `sentryReactRouter` uploads source maps and releases  |
 
-Sentry offers both a [SaaS solution](https://sentry.io/) and
-[self-hosted solution](https://develop.sentry.dev/self-hosted/). This guide
-assumes you are using SaaS but the guide still works with self-hosted with a few
-modifications.
+Traces are sampled at 1.0 in production and 0 elsewhere, set from `MODE` in
+`workers/app.ts`. On the client, replays run at 0.1 for ordinary sessions and 1.0
+for sessions that hit an error.
 
-## Signup
+Noisy or uninteresting events are dropped before they are sent — see
+`app/utils/sentry-event-filters.ts`.
 
-You can sign up for Sentry and create a Remix project from visiting
-[this url](https://sentry.io/signup/?project_platform=javascript-remix) and
-filling out the signup form.
+## Runtime setup
 
-## Setting up the sentry-vite plugin
-
-Once you see the onboarding page which has the DSN, copy that somewhere (this
-becomes `SENTRY_DSN`). Now, set the sentry dsn secret in Fly.io to be used as an
-env var during runtime:
+Create a project in Sentry, take the DSN, and set it as a Worker secret:
 
 ```sh
-fly secrets set SENTRY_DSN=<your_dsn>
+wrangler secret put SENTRY_DSN
 ```
 
-See the guides for React Router v7
-[here(library)](https://docs.sentry.io/platforms/javascript/guides/react/features/react-router/v7/)
-and
-[here(framwork)](https://docs.sentry.io/platforms/javascript/guides/react-router/).
-Note that the dedicated SDK for React Router is under development and features
-are lacking.
+For local development put it in `.env` instead. `SENTRY_DSN` is declared optional
+in `app/utils/env.server.ts`; make it required there if you want a missing DSN to
+be a startup failure.
 
-To generate the auth token, click
-[this](https://sentry.io/orgredirect/settings/:orgslug/developer-settings/new-internal/)
-to create an internal integration (which grants the selected capabilities to the
-recipient, similar to how RBAC works). Give it a name and add the scope for
-`Releases:Admin` and `Organization:Read`. Press Save, and then generate the auth
-token at the bottom of the page under "Tokens", and copy that to a secure
-location (this becomes `SENTRY_AUTH_TOKEN`). Then visit the organization general
-settings page and copy the organization slug (`SENTRY_ORG`), and the slug name
-for your project under `Organization > Projects > Project > Name`
-(`SENTRY_PROJECT`).
+## Build-time setup, for source maps
 
-In the 'build' section of the [Dockerfile](../other/Dockerfile), there is an
-example of how to pass `SENTRY_AUTH_TOKEN` secret, so it is available to Vite
-when `npm run build` is run. You may also uncomment and hard code your
-`SENTRY_ORG` and `SENTRY_PROJECT` values. Setup up your secrets in
-[GitHub Actions secrets](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions).
-You can do the same for any other secret (environment variable) you need at
-build time, just make sure those secrets (variables) are available on the CI
-runner: see the 'deploy' job from [`deploy`](../.github/workflows/deploy.yml)
-workflow. Note that these do not need to be added to the
-[`env.server`](../app/utils/env.server.ts) env vars schema, as they are only
-used during the build and not the runtime.
+Uploading source maps needs three more values at **build** time only —
+`SENTRY_AUTH_TOKEN`, `SENTRY_ORG` and `SENTRY_PROJECT`. They are read by the
+Vite plugin, never at runtime, so they do not belong in `env.server.ts` or in
+Worker secrets.
 
-The Sentry Vite plugin in [`vite.config.ts`](../vite.config.ts) will create
-sentry releases for you and automatically associate commits during the vite
-build once the `SENTRY_AUTH_TOKEN` is set. In this setup we have utilized a
-simple strategy for naming releases of using the commit sha, passed in as a
-build arg via the GitHub action workflow.
+Generate the token as an internal integration in Sentry with the `Releases:Admin`
+and `Organization:Read` scopes. Then either export the three variables in the
+shell you run `npm run deploy` from, or set them wherever the build runs.
+
+Without them the app still reports errors; the stack traces just point at bundled
+output instead of source. See [decision 034](./decisions/034-source-maps.md).
