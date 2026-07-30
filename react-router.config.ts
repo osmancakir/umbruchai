@@ -11,6 +11,9 @@ export default {
 
 	future: {
 		unstable_optimizeDeps: true,
+		// Required for @cloudflare/vite-plugin to drive the SSR environment —
+		// without it the two plugins disagree about the build output directory.
+		v8_viteEnvironmentApi: true,
 	},
 
 	buildEnd: async ({ viteConfig, reactRouterConfig, buildManifest }) => {

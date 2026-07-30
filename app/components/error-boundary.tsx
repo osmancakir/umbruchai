@@ -1,4 +1,3 @@
-import { captureException } from '@sentry/react-router'
 import { useEffect, type ReactElement } from 'react'
 import {
 	type ErrorResponse,
@@ -37,7 +36,12 @@ export function GeneralErrorBoundary({
 	useEffect(() => {
 		if (isResponse) return
 
-		captureException(error)
+		// Imported lazily: this only ever runs in the browser, and the server
+		// bundle now targets workerd, where @sentry/react-router resolves to its
+		// client build and has no captureException to give us.
+		void import('@sentry/react-router').then(({ captureException }) => {
+			captureException(error)
+		})
 	}, [error, isResponse])
 
 	return (

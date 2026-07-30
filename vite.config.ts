@@ -1,3 +1,4 @@
+import { cloudflare } from '@cloudflare/vite-plugin'
 import { reactRouter } from '@react-router/dev/vite'
 import {
 	type SentryReactRouterBuildOptions,
@@ -17,11 +18,6 @@ export default defineConfig((config) => {
 			target: 'es2022',
 			cssMinify: mode === 'production',
 
-			rollupOptions: {
-				input: config.isSsrBuild ? './server/app.ts' : undefined,
-				external: [/node:.*/, 'fsevents'],
-			},
-
 			assetsInlineLimit: (source: string) => {
 				if (
 					source.endsWith('favicon.svg') ||
@@ -33,13 +29,22 @@ export default defineConfig((config) => {
 
 			sourcemap: true,
 		},
+		// Keep dev and preview on the port Playwright and the old express server
+		// both assumed.
 		server: {
+			port: Number(process.env.PORT) || 3000,
 			watch: {
 				ignored: ['**/playwright-report/**'],
 			},
 		},
+		preview: {
+			port: Number(process.env.PORT) || 3000,
+		},
 		sentryConfig,
 		plugins: [
+			// Runs the SSR environment inside workerd, both in `vite dev` and in
+			// the build, so what we develop against is what Cloudflare runs.
+			isTest ? null : cloudflare({ viteEnvironment: { name: 'ssr' } }),
 			envOnlyMacros(),
 			tailwindcss(),
 			reactRouterDevTools(),

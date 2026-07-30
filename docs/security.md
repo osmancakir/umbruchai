@@ -77,9 +77,9 @@ to do this.
 
 ## Rate Limiting
 
-Umbruch AI uses a rate limiter to prevent abuse of the API. This is configured
-in the `server/index.ts` file and can be changed as needed. By default it uses
-[`express-rate-limit`](https://npm.im/express-rate-limit) with the in-memory
-store. There are trade-offs with this simpler approach, but it should be
-relatively simple to externalize the store into Redis as that's a built-in
-feature to express-rate-limit.
+Umbruch AI runs on Cloudflare Workers, where an in-process limiter like
+`express-rate-limit` doesn't work — each request may hit a different isolate.
+Rate limiting is therefore a **WAF rate limiting rule on the zone**, which runs
+ahead of the Worker and is keyed on the real client IP. There is no rate
+limiting code in the app; see [deployment.md](./deployment.md#rate-limiting) for
+the rule and its settings.

@@ -1,0 +1,22 @@
+# Headers for responses served directly from Workers Assets (i.e. everything
+# that matches a file in build/client and therefore never reaches the Worker).
+# Requests handled by the Worker get their headers from workers/app.ts instead.
+#
+# Keep the security headers here in sync with the `helmet()` call in
+# workers/app.ts. Referrer-Policy is deliberately omitted in both places
+# because it breaks our redirectTo logic.
+
+/*
+  Cross-Origin-Resource-Policy: same-origin
+  Strict-Transport-Security: max-age=31536000;includeSubDomains
+  X-Content-Type-Options: nosniff
+  X-DNS-Prefetch-Control: off
+  X-Permitted-Cross-Domain-Policies: none
+
+# React Router fingerprints its assets, so we can cache forever.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Fonts are content-stable — a new cut ships under a new filename.
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable

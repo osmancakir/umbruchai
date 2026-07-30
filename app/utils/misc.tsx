@@ -99,11 +99,16 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getDomainUrl(request: Request) {
+	const url = new URL(request.url)
 	const host =
 		request.headers.get('X-Forwarded-Host') ??
 		request.headers.get('host') ??
-		new URL(request.url).host
-	const protocol = request.headers.get('X-Forwarded-Proto') ?? 'http'
+		url.host
+	// Cloudflare doesn't set X-Forwarded-Proto, so fall back to the request's
+	// own scheme rather than hardcoding http — otherwise every canonical URL,
+	// og:url and sitemap entry in production comes out as http://.
+	const protocol =
+		request.headers.get('X-Forwarded-Proto') ?? url.protocol.replace(/:$/, '')
 	return `${protocol}://${host}`
 }
 

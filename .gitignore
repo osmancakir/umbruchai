@@ -3,6 +3,9 @@ node_modules
 
 /build
 .env
+.dev.vars
+.dev.vars.*
+.wrangler
 .cache
 
 /test-results/

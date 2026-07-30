@@ -14,8 +14,13 @@ declare global {
 	}
 }
 
+// Workers populate process.env from bindings, but never NODE_ENV. Vite
+// statically replaces import.meta.env.MODE at build time, and it's accurate in
+// development, test and production alike.
+const MODE = process.env.NODE_ENV ?? import.meta.env.MODE
+
 export function init() {
-	const parsed = schema.safeParse(process.env)
+	const parsed = schema.safeParse({ ...process.env, NODE_ENV: MODE })
 
 	if (parsed.success === false) {
 		console.error(
@@ -38,7 +43,7 @@ export function init() {
  */
 export function getEnv() {
 	return {
-		MODE: process.env.NODE_ENV,
+		MODE,
 		SENTRY_DSN: process.env.SENTRY_DSN,
 		ALLOW_INDEXING: process.env.ALLOW_INDEXING,
 	}

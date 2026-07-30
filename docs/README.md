@@ -11,6 +11,8 @@ so time goes into building features rather than re-litigating setup decisions.
   with Umbruch AI.
 - [Features](./features.md) - List of features Umbruch AI provides out of the
   box.
+- [Deployment](./deployment.md) - How the app ships to Cloudflare Workers, and
+  what Cloudflare replaced from the original Node/Express setup.
 - [Decisions](./decisions/README.md) - The reasoning behind various
   architectural decisions. A good historical record.
 - [Guiding Principles](./guiding-principles.md) - The guiding principles behind

@@ -4,8 +4,8 @@
     An opinionated React Router application.
   </strong>
   <p>
-    Built on a production-ready foundation: React Router, Prisma, Tailwind CSS,
-    TypeScript, Playwright and Vitest, deployed to Fly.io.
+    Built on a production-ready foundation: React Router, Tailwind CSS,
+    TypeScript, Playwright and Vitest, deployed to Cloudflare Workers.
   </p>
 </div>
 
@@ -20,7 +20,7 @@ npm run dev
 ```
 
 See the [Getting Started guide](./docs/getting-started.md) for the full walk
-through, including environment variables and database setup.
+through, and [Deployment](./docs/deployment.md) for how it ships to Cloudflare.
 
 ## Docs
 

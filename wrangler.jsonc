@@ -1,0 +1,40 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "umbruchai-webapp",
+	"main": "./workers/app.ts",
+	// nodejs_compat gives us node: builtins in the Worker. A date of 2025-04-01
+	// or later is what makes Wrangler populate `process.env` from vars/secrets,
+	// which `app/utils/env.server.ts` relies on.
+	"compatibility_date": "2025-04-01",
+	"compatibility_flags": ["nodejs_compat"],
+	"assets": {
+		"directory": "./build/client",
+		// Assets are served straight from the edge; only requests that don't
+		// match a file reach the Worker. Caching and static security headers for
+		// those responses live in `public/_headers`.
+		"not_found_handling": "none",
+	},
+	// The zone is registered with Cloudflare, so `wrangler deploy` creates and
+	// manages the DNS records for these hostnames itself. www is served by the
+	// same Worker purely so it can 301 to the apex (see workers/app.ts).
+	"routes": [
+		{ "pattern": "umbruchai.com", "custom_domain": true },
+		{ "pattern": "www.umbruchai.com", "custom_domain": true },
+	],
+	// No umbruchai-webapp.<subdomain>.workers.dev — one canonical hostname only.
+	// Per-version preview URLs are a separate setting and still work.
+	"workers_dev": false,
+	"observability": {
+		"enabled": true,
+	},
+	"vars": {
+		// Set to "false" to keep search engines out (e.g. on a staging worker).
+		"ALLOW_INDEXING": "true",
+	},
+	// SENTRY_DSN is a secret: `npx wrangler secret put SENTRY_DSN`.
+	// Locally it comes from `.dev.vars`.
+	//
+	// Rate limiting is deliberately not a binding here — it's a WAF rate
+	// limiting rule on the zone, which runs before the Worker. See
+	// docs/deployment.md.
+}
