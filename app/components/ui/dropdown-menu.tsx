@@ -90,7 +90,9 @@ const DropdownMenuSubTrigger = ({
 		{...props}
 	>
 		{children}
-		<span className="ml-auto size-4">▶️</span>
+		<span aria-hidden="true" className="ml-auto pl-4">
+			→
+		</span>
 	</DropdownMenuPrimitive.SubTrigger>
 )
 
@@ -148,7 +150,7 @@ const DropdownMenuCheckboxItem = ({
 					<svg viewBox="0 0 8 8">
 						<path
 							d="M1,4 L3,6 L7,2"
-							stroke="black"
+							stroke="currentColor"
 							strokeWidth="1"
 							fill="none"
 						/>
@@ -175,7 +177,7 @@ const DropdownMenuRadioItem = ({
 	>
 		<span className="absolute left-2 flex size-3.5 items-center justify-center">
 			<DropdownMenuPrimitive.ItemIndicator>
-				<span className="size-2">⚪</span>
+				<span aria-hidden="true" className="block size-1.5 bg-current" />
 			</DropdownMenuPrimitive.ItemIndicator>
 		</span>
 		{children}

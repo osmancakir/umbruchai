@@ -1,6 +1,13 @@
 import { clsx, type ClassValue } from 'clsx'
 import { type GetSrcArgs, defaultGetSrc } from 'openimg/react'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import {
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+	useSyncExternalStore,
+} from 'react'
 import { useFormAction, useNavigation } from 'react-router'
 import { useSpinDelay } from 'spin-delay'
 import { extendTailwindMerge } from 'tailwind-merge'
@@ -276,6 +283,32 @@ export function useDoubleCheck() {
 	}
 
 	return { doubleCheck, getButtonProps }
+}
+
+/**
+ * Subscribe to a CSS media query from JS, for the few cases where a layout
+ * cannot be expressed in a class alone — a portalled popover that has to be
+ * built differently rather than merely restyled.
+ *
+ * The server has no viewport, so it always reports `false`; the first client
+ * render matches that and the real value arrives immediately after hydration.
+ * Only use this for state that is invisible at first paint (inside a closed
+ * menu, say), never for the initial layout of the page itself.
+ */
+export function useMediaQuery(query: string) {
+	const subscribe = useCallback(
+		(onChange: () => void) => {
+			const list = window.matchMedia(query)
+			list.addEventListener('change', onChange)
+			return () => list.removeEventListener('change', onChange)
+		},
+		[query],
+	)
+	return useSyncExternalStore(
+		subscribe,
+		() => window.matchMedia(query).matches,
+		() => false,
+	)
 }
 
 /**

@@ -135,11 +135,11 @@ export function ArticleCard({
 					) : null}
 				</div>
 
-				<h3 className="font-display text-[1.05rem] leading-[1.25] font-bold tracking-[-0.02em] text-balance">
+				<h3 className="font-display text-[1.05rem] leading-tight font-bold tracking-[-0.02em] text-balance">
 					{title}
 				</h3>
 
-				<p className="font-reading text-steel line-clamp-4 text-[0.95rem] leading-[1.5]">
+				<p className="font-reading text-steel line-clamp-4 text-[0.95rem] leading-normal">
 					{resolveLevelText(item.summary, level, '')}
 				</p>
 
@@ -209,9 +209,6 @@ export function LeadStory({
 							{item.subtitle}
 						</p>
 					) : null}
-					<p className="font-reading text-steel mt-4 max-w-[58ch] leading-[1.6]">
-						{resolveLevelText(item.summary, level, '')}
-					</p>
 					<div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2">
 						<AgentByline authors={item.agents} className="relative z-10" />
 						<time className="eyebrow" dateTime={item.date}>

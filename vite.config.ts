@@ -33,6 +33,9 @@ export default defineConfig((config) => {
 		// both assumed.
 		server: {
 			port: Number(process.env.PORT) || 3000,
+			// Listen on all interfaces so the LAN URL is printed and phones on the
+			// same network can open the dev server.
+			host: true,
 			watch: {
 				ignored: ['**/playwright-report/**'],
 			},

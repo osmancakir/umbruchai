@@ -1,11 +1,8 @@
 import { useEffect, useMemo } from 'react'
 import { data, Link, useSearchParams } from 'react-router'
 import { ArticleCard, LeadStory } from '#app/components/article/card.tsx'
-import {
-	FilterChips,
-	Segmented,
-	type Option,
-} from '#app/components/article/controls.tsx'
+import { FilterChips, type Option } from '#app/components/article/controls.tsx'
+import { FilterMenu } from '#app/components/article/filter-menu.tsx'
 import { FaultLine } from '#app/components/fault-line.tsx'
 import {
 	getArticleCount,
@@ -268,6 +265,34 @@ export default function Index({ loaderData }: Route.ComponentProps) {
 		return set
 	}, [availableLeanings])
 
+	// In the menu the political desk is a submenu rather than a plain entry, so
+	// it is lifted out of the ressort list.
+	const hasPoliticalDesk = categories.includes(POLITICS_ECONOMICS_CATEGORY)
+	const menuCategoryOptions = useMemo(
+		() =>
+			categoryOptions.filter(
+				(option) => option.value !== POLITICS_ECONOMICS_CATEGORY,
+			),
+		[categoryOptions],
+	)
+	// "Alle" is the default rather than a choice, so the menu drops it from every
+	// axis and clears by re-selecting instead — the same toggle the chips use.
+	const menuAgencyOptions = agencyOptions.filter(
+		(option) => option.value !== 'all',
+	)
+	const menuLeaningOptions = leaningOptions.filter(
+		(option) => option.value !== 'all',
+	)
+	/** The political desk, showing everything in it: the submenu's own zero state. */
+	const wholePoliticalDesk =
+		isPolitical && agency === 'all' && leaning === 'all'
+	const activeFilterCount = [
+		category !== 'all',
+		level !== 'easy',
+		agency !== 'all',
+		leaning !== 'all',
+	].filter(Boolean).length
+
 	function update(
 		mutate: (next: URLSearchParams) => void,
 		options?: { preventScrollReset?: boolean },
@@ -291,13 +316,11 @@ export default function Index({ loaderData }: Route.ComponentProps) {
 		})
 	}
 
-	/** Chips are toggles: picking the ressort you are already in clears it. */
-	function setCategory(value: ArticleCategory) {
-		const next = value === category ? 'all' : value
+	function chooseCategory(value: ArticleCategory | 'all') {
 		update((params) => {
-			if (next === 'all') params.delete('category')
-			else params.set('category', next)
-			if (next !== POLITICS_ECONOMICS_CATEGORY) {
+			if (value === 'all') params.delete('category')
+			else params.set('category', value)
+			if (value !== POLITICS_ECONOMICS_CATEGORY) {
 				params.delete('agency')
 				params.delete('leaning')
 			}
@@ -305,8 +328,28 @@ export default function Index({ loaderData }: Route.ComponentProps) {
 		})
 	}
 
+	/**
+	 * Chips and menu rows are toggles: picking the one you are already on clears
+	 * it. It is what stands in for the "Alle" entry neither control prints.
+	 */
+	function setCategory(value: ArticleCategory) {
+		chooseCategory(value === category ? 'all' : value)
+	}
+
+	function toggleAgency(value: AgencyFilter) {
+		setAgency(value === agency ? 'all' : value)
+	}
+
+	function toggleLeaning(value: LeaningFilter) {
+		setLeaning(value === leaning ? 'all' : value)
+	}
+
+	// Agency and leaning pin the ressort as well as the axis: they are reachable
+	// from inside the menu's political submenu, which a reader can open while
+	// standing in any other ressort.
 	function setAgency(value: AgencyFilter) {
 		update((next) => {
+			next.set('category', POLITICS_ECONOMICS_CATEGORY)
 			if (value === 'all') next.delete('agency')
 			else next.set('agency', value)
 			const stillAvailable =
@@ -317,6 +360,15 @@ export default function Index({ loaderData }: Route.ComponentProps) {
 						(value === 'all' || pair.agencyLevel === value),
 				)
 			if (!stillAvailable) next.delete('leaning')
+			next.delete('page')
+		})
+	}
+
+	function setLeaning(value: LeaningFilter) {
+		update((next) => {
+			next.set('category', POLITICS_ECONOMICS_CATEGORY)
+			if (value === 'all') next.delete('leaning')
+			else next.set('leaning', value)
 			next.delete('page')
 		})
 	}
@@ -337,64 +389,74 @@ export default function Index({ loaderData }: Route.ComponentProps) {
 
 	return (
 		<main className="container max-w-6xl pb-24">
-			<header className="pt-8 sm:pt-12">
-				<p className="eyebrow flex flex-wrap justify-between gap-x-6 gap-y-1">
-					<span>Nachrichten aus der Maschine</span>
-					{/* The site header already carries "Agenten aktiv"; the masthead
-					    counts the archive instead of repeating it. */}
-					<span className="tabular-nums">
-						{totalPublished} Texte · {categories.length} Ressorts
-					</span>
-				</p>
-			</header>
-
-			{lead ? (
-				<>
-					<div className="pt-10 pb-12 sm:pt-14 sm:pb-16">
-						<LeadStory item={lead} level={level} />
-					</div>
-					<FaultLine at={0.5} tone="signal" />
-				</>
-			) : null}
-
-			<section
-				aria-label="Filter"
-				className="border-steel-lt flex flex-col gap-4 border-b py-8"
-			>
+			{/* The controls sit above the lead: the chips inline where there is room
+			    for them, everything else folded into the menu on the right. */}
+			<div className="flex items-center gap-4 pt-8 sm:pt-10">
 				<FilterChips
 					label="Ressort"
 					hideLabel
 					options={categoryOptions}
 					value={category}
 					onChange={setCategory}
+					className="hidden md:flex"
 				/>
-				<Segmented
-					label="Niveau"
-					hideLabel
-					options={levelOptions}
-					value={level}
-					onChange={(value: LanguageLevel) => setSimple('level', value, 'easy')}
+				<FilterMenu
+					activeCount={activeFilterCount}
+					className="ml-auto shrink-0"
+					ressort={{
+						label: 'Ressort',
+						options: menuCategoryOptions,
+						value: category,
+						onChange: setCategory,
+					}}
+					niveau={{
+						label: 'Niveau',
+						options: levelOptions,
+						value: level,
+						onChange: (value: LanguageLevel) =>
+							setSimple('level', value, 'easy'),
+					}}
+					political={
+						hasPoliticalDesk
+							? {
+									label: categoryLabels[POLITICS_ECONOMICS_CATEGORY],
+									allLabel: 'Ganzes Ressort',
+									isActive: isPolitical,
+									allIsActive: wholePoliticalDesk,
+									// Widens to the whole desk from a narrowed one, and toggles
+									// out of the desk when it is already showing everything.
+									onSelect: () =>
+										chooseCategory(
+											wholePoliticalDesk ? 'all' : POLITICS_ECONOMICS_CATEGORY,
+										),
+									agency: {
+										label: 'Agency',
+										options: menuAgencyOptions,
+										value: agency,
+										onChange: toggleAgency,
+									},
+									leaning: {
+										label: 'Richtung',
+										options: menuLeaningOptions,
+										value: leaning,
+										disabledValues: disabledLeanings,
+										onChange: toggleLeaning,
+									},
+								}
+							: undefined
+					}
+					note={`${totalPublished} Texte · ${categories.length} Ressorts`}
 				/>
-				{isPolitical ? (
-					<>
-						<Segmented
-							label="Agency"
-							options={agencyOptions}
-							value={agency}
-							onChange={setAgency}
-						/>
-						<Segmented
-							label="Richtung"
-							options={leaningOptions}
-							value={leaning}
-							disabledValues={disabledLeanings}
-							onChange={(value: LeaningFilter) =>
-								setSimple('leaning', value, 'all')
-							}
-						/>
-					</>
-				) : null}
-			</section>
+			</div>
+
+			{lead ? (
+				<>
+					<div className="pt-8 pb-12 sm:pt-10 sm:pb-16">
+						<LeadStory item={lead} level={level} />
+					</div>
+					<FaultLine at={0.5} tone="signal" />
+				</>
+			) : null}
 
 			<section aria-label="Artikel" className="pt-10">
 				<p className="eyebrow mb-6 flex flex-wrap justify-between gap-x-6 gap-y-1">
