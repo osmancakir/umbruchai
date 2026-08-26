@@ -155,7 +155,12 @@ export default function App() {
 			optimizerEndpoint="/resources/images"
 			getSrc={getImgSrc}
 		>
-			<div className="flex min-h-screen flex-col">
+			{/* A route that must fit exactly one screen (the SKLAVE game) opts in
+			    with `data-viewport-fit` on its <main>. That swaps the page from
+			    "at least a screen tall" to "exactly a screen tall", which is what
+			    gives its flex-1 canvas a definite height to grow into. Inert for
+			    every other route. */}
+			<div className="flex min-h-screen flex-col has-[main[data-viewport-fit]]:h-dvh">
 				<header>
 					<div className="container flex flex-wrap items-center justify-between gap-4 py-6 md:gap-8">
 						<Link
@@ -175,14 +180,12 @@ export default function App() {
 					<FaultLine at={0.38} className="container" />
 				</header>
 
-				<div className="flex flex-1 flex-col">
+				<div className="flex flex-1 flex-col has-[main[data-viewport-fit]]:min-h-0">
 					<Outlet />
 				</div>
 
 				<footer className="border-steel-lt container mt-16 flex flex-wrap items-center justify-between gap-4 border-t py-8">
-					<p className="eyebrow">
-						Umbruch.AI · gesetzt in Martian Mono, JetBrains Mono, Newsreader
-					</p>
+					<p className="eyebrow">Umbruch.AI · gesetzt in Newsreader</p>
 					<ThemeSwitch userPreference={data.requestInfo.userPrefs.theme} />
 				</footer>
 			</div>

@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react'
+import { Fragment, type ReactNode } from 'react'
 import { cn } from '#app/utils/misc.tsx'
 
 /**
@@ -92,6 +92,7 @@ export function FilterChips<T extends string>({
 	options,
 	value,
 	onChange,
+	renderAfterOption,
 	className,
 }: {
 	label: string
@@ -101,6 +102,8 @@ export function FilterChips<T extends string>({
 	/** A value outside `options` — "all" — leaves every chip unpressed. */
 	value: string
 	onChange: (value: T) => void
+	/** Optional content inserted immediately after a particular chip. */
+	renderAfterOption?: (option: Option<T>) => ReactNode
 	className?: string
 }) {
 	return (
@@ -116,20 +119,22 @@ export function FilterChips<T extends string>({
 				{options.map((option) => {
 					const isActive = option.value === value
 					return (
-						<button
-							key={option.value}
-							type="button"
-							aria-pressed={isActive}
-							onClick={() => onChange(option.value)}
-							className={cn(
-								'font-system flex min-h-11 items-center border px-3 text-[0.62rem] tracking-[0.14em] uppercase transition-colors',
-								isActive
-									? 'border-foreground bg-foreground text-background'
-									: 'border-steel-lt text-steel hover:border-foreground hover:text-foreground',
-							)}
-						>
-							{option.label}
-						</button>
+						<Fragment key={option.value}>
+							<button
+								type="button"
+								aria-pressed={isActive}
+								onClick={() => onChange(option.value)}
+								className={cn(
+									'font-system flex min-h-11 items-center border px-3 text-[0.62rem] tracking-[0.14em] uppercase transition-colors',
+									isActive
+										? 'border-foreground bg-foreground text-background'
+										: 'border-steel-lt text-steel hover:border-foreground hover:text-foreground',
+								)}
+							>
+								{option.label}
+							</button>
+							{renderAfterOption?.(option)}
+						</Fragment>
 					)
 				})}
 			</div>

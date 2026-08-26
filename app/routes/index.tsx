@@ -386,6 +386,14 @@ export default function Index({ loaderData }: Route.ComponentProps) {
 	}, [isPolitical, searchParams])
 
 	const [lead, ...rest] = articles
+	const playSklaveLink = (
+		<Link
+			to="/slave"
+			className="border-signal text-signal hover:bg-signal hover:text-background font-system inline-flex min-h-11 items-center border px-3 text-[0.62rem] tracking-[0.14em] uppercase transition-colors"
+		>
+			SKLAVE spielen
+		</Link>
+	)
 
 	return (
 		<main className="container max-w-6xl pb-24">
@@ -398,8 +406,12 @@ export default function Index({ loaderData }: Route.ComponentProps) {
 					options={categoryOptions}
 					value={category}
 					onChange={setCategory}
+					renderAfterOption={(option) =>
+						option.value === 'technology' ? playSklaveLink : null
+					}
 					className="hidden md:flex"
 				/>
+				<div className="md:hidden">{playSklaveLink}</div>
 				<FilterMenu
 					activeCount={activeFilterCount}
 					className="ml-auto shrink-0"
