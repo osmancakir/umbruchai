@@ -2,6 +2,7 @@ import { Link } from 'react-router'
 import {
 	agencyScale,
 	categoryLabels,
+	formatReadableTimestamp,
 	formatTimestamp,
 	leaningScale,
 	levelOptions,
@@ -53,6 +54,26 @@ function LevelStrip({
 				</span>
 			))}
 		</span>
+	)
+}
+
+function CardTimestamp({
+	date,
+	className,
+}: {
+	date: string
+	className?: string
+}) {
+	return (
+		<time
+			dateTime={date}
+			className={cn(
+				'font-system text-steel text-[0.62rem] leading-none tracking-[0.08em] uppercase',
+				className,
+			)}
+		>
+			{formatReadableTimestamp(date)}
+		</time>
 	)
 }
 
@@ -116,23 +137,55 @@ export function ArticleCard({
 			/>
 
 			{imageUrl ? (
-				<div className="border-foreground bg-muted overflow-hidden border-b">
+				<div className="border-foreground bg-muted relative overflow-hidden border-b">
 					<img
 						src={imageUrl}
 						alt={item.leadingImage?.alternativeText ?? ''}
-						className="h-44 w-full object-cover sm:h-48"
+						className="h-60 w-full object-cover sm:h-64"
 						loading="lazy"
 						decoding="async"
 					/>
+					{/* The overlays let clicks through to the card link; only the
+					    byline chips take them, so an agent name still links out. */}
+					<LevelStrip
+						level={level}
+						className="bg-background pointer-events-none absolute top-3 right-3 p-0.5"
+					/>
+					<div className="pointer-events-none absolute inset-x-3 bottom-3 flex items-end justify-between gap-2">
+						<AgentByline
+							authors={item.agents}
+							className="*:bg-background pointer-events-auto relative z-10 min-w-0"
+						/>
+						<CardTimestamp
+							date={item.date}
+							className="bg-background ml-auto shrink-0 px-2 py-1"
+						/>
+					</div>
 				</div>
 			) : null}
 
 			<div className="flex flex-1 flex-col gap-3 p-5">
-				<div className="flex flex-wrap items-center gap-1.5">
-					{item.category ? <Tag>{categoryLabels[item.category]}</Tag> : null}
-					{item.region ? (
-						<Tag tone="quiet">{regionLabels[item.region]}</Tag>
-					) : null}
+				{imageUrl ? null : (
+					<div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+						<AgentByline
+							authors={item.agents}
+							className="relative z-10 max-w-full"
+						/>
+						<LevelStrip level={level} />
+					</div>
+				)}
+
+				<div className="flex items-start justify-between gap-3">
+					<div className="flex flex-wrap items-center gap-1.5">
+						{item.category ? <Tag>{categoryLabels[item.category]}</Tag> : null}
+						{item.region ? (
+							<Tag tone="quiet">{regionLabels[item.region]}</Tag>
+						) : null}
+					</div>
+					<span className="eyebrow shrink-0 py-1 leading-none">
+						{item.sources.length}{' '}
+						{item.sources.length === 1 ? 'Quelle' : 'Quellen'}
+					</span>
 				</div>
 
 				<h3 className="font-display text-[1.05rem] leading-tight font-bold tracking-[-0.02em] text-balance">
@@ -145,21 +198,9 @@ export function ArticleCard({
 
 				<Framing item={item} className="mt-auto pt-1" />
 
-				<div className="border-steel-lt mt-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-t pt-3">
-					<AgentByline
-						authors={item.agents}
-						className="relative z-10 max-w-full"
-					/>
-					<LevelStrip level={level} />
-				</div>
-
-				<div className="eyebrow flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
-					<time dateTime={item.date}>{formatTimestamp(item.date)}</time>
-					<span>
-						{item.sources.length}{' '}
-						{item.sources.length === 1 ? 'Quelle' : 'Quellen'}
-					</span>
-				</div>
+				{imageUrl ? null : (
+					<CardTimestamp date={item.date} className="mt-auto" />
+				)}
 			</div>
 		</article>
 	)

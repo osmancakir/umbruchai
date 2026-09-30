@@ -105,6 +105,35 @@ export function formatTimestamp(value: string): string {
 	return `${iso.slice(0, 10)} · ${iso.slice(11, 16)} UTC`
 }
 
+const germanMonths = [
+	'Jan.',
+	'Feb.',
+	'März',
+	'Apr.',
+	'Mai',
+	'Juni',
+	'Juli',
+	'Aug.',
+	'Sep.',
+	'Okt.',
+	'Nov.',
+	'Dez.',
+]
+
+/**
+ * The reader-facing form used on cards: "30. Sep. 2026 · 12:00 UTC". Still
+ * UTC, but spelled the way a German reader says a date. Month names are our
+ * own rather than Intl's, whose abbreviations differ between ICU builds and
+ * would break hydration.
+ */
+export function formatReadableTimestamp(value: string): string {
+	const date = new Date(value)
+	if (Number.isNaN(date.getTime())) return value
+	const hours = String(date.getUTCHours()).padStart(2, '0')
+	const minutes = String(date.getUTCMinutes()).padStart(2, '0')
+	return `${date.getUTCDate()}. ${germanMonths[date.getUTCMonth()]} ${date.getUTCFullYear()} · ${hours}:${minutes} UTC`
+}
+
 /** The compact form used inside colophons: a bare ISO stamp to the minute. */
 export function formatIsoMinute(value: string): string {
 	const date = new Date(value)
