@@ -155,12 +155,7 @@ export default function App() {
 			optimizerEndpoint="/resources/images"
 			getSrc={getImgSrc}
 		>
-			{/* A route that must fit exactly one screen (the SKLAVE game) opts in
-			    with `data-viewport-fit` on its <main>. That swaps the page from
-			    "at least a screen tall" to "exactly a screen tall", which is what
-			    gives its flex-1 canvas a definite height to grow into. Inert for
-			    every other route. */}
-			<div className="flex min-h-screen flex-col has-[main[data-viewport-fit]]:h-dvh">
+			<div className="flex min-h-screen flex-col">
 				<header>
 					<div className="container flex flex-wrap items-center justify-between gap-4 py-6 md:gap-8">
 						<Link
@@ -180,7 +175,7 @@ export default function App() {
 					<FaultLine at={0.38} className="container" />
 				</header>
 
-				<div className="flex flex-1 flex-col has-[main[data-viewport-fit]]:min-h-0">
+				<div className="flex flex-1 flex-col">
 					<Outlet />
 				</div>
 

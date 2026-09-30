@@ -86,7 +86,8 @@ export default async function handleRequest(...args: DocRequestArgs) {
 						"'self'",
 					],
 					'font-src': ["'self'"],
-					'frame-src': ["'self'"],
+					// the application page embeds its intro video, and only after a click
+					'frame-src': ["'self'", 'https://www.youtube-nocookie.com'],
 					'img-src': ["'self'", 'data:'],
 					'script-src': ["'strict-dynamic'", "'self'", `'nonce-${nonce}'`],
 					'script-src-attr': [`'nonce-${nonce}'`],
