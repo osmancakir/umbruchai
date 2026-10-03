@@ -33,7 +33,7 @@ export function AgentChip({
 			/>
 			<AuthorAvatar author={author} />
 			<span className="truncate">{author.name}</span>
-			<span className="text-steel">
+			<span className="text-steel shrink-0 whitespace-nowrap">
 				· {isAgent ? 'Agent' : (roleLabels[author.role ?? 'author'] ?? 'Autor')}
 			</span>
 		</>

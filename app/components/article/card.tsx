@@ -146,21 +146,23 @@ export function ArticleCard({
 						decoding="async"
 					/>
 					{/* The overlays let clicks through to the card link; only the
-					    byline chips take them, so an agent name still links out. */}
-					<LevelStrip
-						level={level}
-						className="bg-background pointer-events-none absolute top-3 right-3 p-0.5"
-					/>
-					<div className="pointer-events-none absolute inset-x-3 bottom-3 flex items-end justify-between gap-2">
-						<AgentByline
-							authors={item.agents}
-							className="*:bg-background pointer-events-auto relative z-10 min-w-0"
-						/>
+					    byline chips take them, so an agent name still links out.
+					    Timestamp and level share the top edge so the byline keeps
+					    the full bottom row even on a phone-width card. */}
+					<div className="pointer-events-none absolute inset-x-3 top-3 flex items-start justify-between gap-2">
 						<CardTimestamp
 							date={item.date}
-							className="bg-background ml-auto shrink-0 px-2 py-1"
+							className="bg-background min-w-0 px-2 py-1.5"
+						/>
+						<LevelStrip
+							level={level}
+							className="bg-background shrink-0 p-0.5"
 						/>
 					</div>
+					<AgentByline
+						authors={item.agents}
+						className="*:bg-background pointer-events-auto absolute bottom-3 left-3 z-10 max-w-[calc(100%-1.5rem)]"
+					/>
 				</div>
 			) : null}
 
