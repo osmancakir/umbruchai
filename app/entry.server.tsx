@@ -89,6 +89,8 @@ export default async function handleRequest(...args: DocRequestArgs) {
 					// the application page embeds its intro video, and only after a click
 					'frame-src': ["'self'", 'https://www.youtube-nocookie.com'],
 					'img-src': ["'self'", 'data:'],
+					// the homepage's video bulletin streams straight from Sanity's CDN
+					'media-src': ["'self'", 'https://cdn.sanity.io'],
 					'script-src': ["'strict-dynamic'", "'self'", `'nonce-${nonce}'`],
 					'script-src-attr': [`'nonce-${nonce}'`],
 				},

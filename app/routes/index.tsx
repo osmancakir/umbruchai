@@ -3,6 +3,7 @@ import { data, Link, useSearchParams } from 'react-router'
 import { ArticleCard, LeadStory } from '#app/components/article/card.tsx'
 import { FilterChips, type Option } from '#app/components/article/controls.tsx'
 import { FilterMenu } from '#app/components/article/filter-menu.tsx'
+import { BulletinPlayer } from '#app/components/bulletin-player.tsx'
 import { FaultLine } from '#app/components/fault-line.tsx'
 import {
 	getArticleCount,
@@ -24,6 +25,7 @@ import {
 	type LanguageLevel,
 	type Leaning,
 } from '#app/utils/articles.types.ts'
+import { getLatestBulletin } from '#app/utils/bulletin.server.ts'
 import { pipeHeaders } from '#app/utils/headers.server.ts'
 import { makeTimings } from '#app/utils/timing.server.ts'
 import { type Route } from './+types/index.ts'
@@ -170,9 +172,10 @@ export async function loader({ request }: Route.LoaderArgs) {
 	const searchParams = new URL(request.url).searchParams
 	const page = parsePage(searchParams.get('page'))
 
-	const [categories, framingPairs] = await Promise.all([
+	const [categories, framingPairs, bulletin] = await Promise.all([
 		getPopulatedCategories({ timings }),
 		getArticleFramingPairs({ timings }),
+		getLatestBulletin({ timings }),
 	])
 
 	const categoryOptions = buildCategoryOptions(categories)
@@ -209,6 +212,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 	return data(
 		{
 			articles,
+			bulletin,
 			categories,
 			framingPairs,
 			page,
@@ -228,6 +232,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 export default function Index({ loaderData }: Route.ComponentProps) {
 	const {
 		articles,
+		bulletin,
 		categories,
 		framingPairs,
 		page,
@@ -386,6 +391,10 @@ export default function Index({ loaderData }: Route.ComponentProps) {
 	}, [isPolitical, searchParams])
 
 	const [lead, ...rest] = articles
+	// The bulletin belongs to the front page itself. Agency and leaning always
+	// pin a ressort, so an unset category means nothing is filtered; the reading
+	// level only changes how the same stories are told, so it keeps the video.
+	const showBulletin = bulletin && category === 'all'
 	const applicationLink = (
 		<Link
 			to="/bewerbung-sz"
@@ -461,9 +470,26 @@ export default function Index({ loaderData }: Route.ComponentProps) {
 				/>
 			</div>
 
+			{showBulletin ? (
+				<>
+					<BulletinPlayer
+						bulletin={bulletin}
+						level={level}
+						className="pt-8 pb-12 sm:pt-10 sm:pb-16"
+					/>
+					<FaultLine at={0.28} />
+				</>
+			) : null}
+
 			{lead ? (
 				<>
-					<div className="pt-8 pb-12 sm:pt-10 sm:pb-16">
+					<div
+						className={
+							showBulletin
+								? 'pt-10 pb-12 sm:pb-16'
+								: 'pt-8 pb-12 sm:pt-10 sm:pb-16'
+						}
+					>
 						<LeadStory item={lead} level={level} />
 					</div>
 					<FaultLine at={0.5} tone="signal" />
